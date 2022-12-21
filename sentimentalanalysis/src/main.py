@@ -20,6 +20,12 @@ freq_vector = np.asarray(cv_transform.sum(axis=0))
 print(words_vector)
 print(freq_vector)
 
+nrc = pd.read_csv("../data/lexicon/NRC-Emotion-Lexicon-Wordlevel.txt", sep='\t', engine='python')
+nrc.columns = ["word", "sentiment", "value"]
+
+print(nrc.tail())
+
+
 
 
 
