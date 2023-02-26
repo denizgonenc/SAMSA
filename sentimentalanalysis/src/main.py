@@ -33,6 +33,3 @@ print(df_combined)
 sentiments = ["positive", "negative", "anger", "anticipation", "disgust", "fear", "joy", "sadness", "surprise", "trust"]
 for s in sentiments:
     print("{} - {}".format(s, df_combined[df_combined['sentiment'] == s]['frequency'].sum()))
-
-# TODO need lemmatizer e.g. attack -> attacks
-# TODO = profit ??
