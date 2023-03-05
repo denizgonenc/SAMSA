@@ -17,6 +17,10 @@ class Graph:
             self.E.append((vertex, edge))
 
 
+    def get_depth(self):
+        visited = []
+        d = 0
+
 
 
 
