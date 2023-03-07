@@ -1,7 +1,13 @@
 import pandas as pd
 from nltk.stem import WordNetLemmatizer
 from gensim.models import KeyedVectors
-import graph
+import DAG
+
+# nrc = pd.read_csv("../data/lexicon/NRC-Emotion-Lexicon-Wordlevel.txt", sep='\t', engine='python')
+# nrc.columns = ["word", "sentiment", "value"]
+# nrc = nrc[nrc['value'] == 1].drop(['value'], axis=1)
+# nrc.reset_index(inplace=True, drop=True)
+# nrc.to_csv("../data/processed/processed_nrc.csv")
 
 # model = gensim.downloader.load('glove-wiki-gigaword-50')
 
@@ -9,7 +15,7 @@ import graph
 model = KeyedVectors.load('model.kv')
 
 lemmatizer = WordNetLemmatizer()
-wordgraph = graph.Graph()
+wordgraph = DAG.DAG()
 nrc = pd.read_csv('../data/processed/processed_nrc.csv', index_col=0)
 
 # iterate over the words for each sentiment category, take the top5 most similar words to the current word
@@ -32,10 +38,11 @@ for s in sentiments[2:3]:
             if len(top5) == 5:
                 break
 
-        wordgraph.add_vertex(w1, top5)
+        for w2 in top5:
+            wordgraph.add_edge(w1, w2[0], w2[1])
 
-print(wordgraph.V)
-print(wordgraph.E)
+
+
 
 
 
