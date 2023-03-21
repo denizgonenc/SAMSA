@@ -23,13 +23,13 @@ for s in sentiments:
     # w1 is just string
     # w2 is a tuple of (sting, float)
     for w1 in words:
-        top100 = model.most_similar(w1, topn=100)
+        top10 = model.most_similar(w1, topn=10)
 
         count = 0
         total = 0
-        for w2 in top100:
+        for w2 in top10:
             # lemmatize so that there are no duplicates
-            if lemmatizer.lemmatize(w2[0]) == w1:
+            if lemmatizer.lemmatize(w2[0]) == lemmatizer.lemmatize(w1):
                 continue
             else:
                 temp = nrc[(nrc["word"] == w1) & (nrc["sentiment"] == s)]["value"].tolist()[0]
@@ -41,9 +41,9 @@ for s in sentiments:
                     total -= w2[1]
 
         if count == 0:
-            sentiment_scores[s][w1] = 0
+            sentiment_scores[s][lemmatizer.lemmatize(w1)] = 0
         else:
-            sentiment_scores[s][w1] = total / count
+            sentiment_scores[s][lemmatizer.lemmatize(w1)] = total / count
 
 
 with open("sentiment_scores.pkl", "wb") as f:
