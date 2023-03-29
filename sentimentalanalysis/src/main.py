@@ -1,12 +1,10 @@
 import pickle
 
 # Read scores from pickle
-with open('sentiment_scores.pkl', 'rb') as f:
-    sentiment_scores = dict(pickle.load(f))
+with open('../data/processed/negative.pkl', 'rb') as f:
+    negative = dict(pickle.load(f))
 
-positive = sentiment_scores["positive"]
-print(min(positive.values()))
-print(max(positive.values()))
+print(negative)
 
 
 
