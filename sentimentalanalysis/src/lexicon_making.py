@@ -18,7 +18,7 @@ words = list(filter(lambda x: x in model, pd.unique(nrc['word'])))  # get words 
 
 # iterate over the words for each sentiment category, take the top5 most similar words to the current word
 sentiments = ["positive", "negative", "anger", "anticipation", "disgust", "fear", "joy", "sadness", "surprise", "trust"]
-s = "anticipation"
+s = "disgust"
 
 # w1 is just string
 # w2 is a tuple of (string, float)
@@ -54,5 +54,5 @@ for i in range(len(words)):
         sentiment_scores[s][w1] = total / count
 
 
-with open("../data/processed/sentiments/anticipation.pkl", "wb") as f:
+with open("../data/processed/sentiments/disgust.pkl", "wb") as f:
     pickle.dump(sentiment_scores, f)
