@@ -37,6 +37,7 @@ def predict_sentence(sentence):
 
 
 def predict_dialogue(dialogue):
+    dialogue = nltk.tokenize.sent_tokenize(dialogue)
     sentiment_counts = {}
     sentiment_probabilities = {}
 
@@ -65,8 +66,16 @@ def predict_dialogue(dialogue):
     most_likely_sentiment = max(weighted_probabilities, key=weighted_probabilities.get)
     highest_weighted_probability = weighted_probabilities[most_likely_sentiment]
 
-    return most_likely_sentiment, highest_weighted_probability
+    pos_neg_net = None
+    if most_likely_sentiment in ["anger", "disgust", "fear", "sadness"]:
+        pos_neg_net = "negative"
+    elif most_likely_sentiment in ["joy", "trust"]:
+        pos_neg_net = "positive"
+    else:
+        pos_neg_net= "neutral"
+
+    return most_likely_sentiment, round(highest_weighted_probability, 2), pos_neg_net
 
 
-print(predict_dialogue(["Alright", "I believe you"]))
+print(predict_dialogue("Did you hear that?  They've shut down the main reactor.  We'll be destroyed for sure.  This is madness!"))
 
