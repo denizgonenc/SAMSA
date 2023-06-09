@@ -4,3 +4,13 @@ matplotlib
 scikit-learn
 SpeechRecognition
 PyAudio
+pydub
+MoviePy
+scipy
+speechbrain
+transformers
+
+git+https://github.com/huggingface/datasets.git
+git+https://github.com/huggingface/transformers.git
+torchaudio
+librosa
