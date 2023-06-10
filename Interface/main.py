@@ -165,14 +165,11 @@ def search(q: str, db: models.Session = Depends(database.get_db)):
     )).all()
     logging.info('Search has been run with parameter `{}`'.format(q))
     if len(results) == 0:
-        _error = {
-            "message": "There is no such movie named `{}`".format(q),
-        }
-        return JSONResponse(content=json.dumps(_error), status_code=404)
-        # return RedirectResponse(request.url_for('not_found_page'), status_code=404)
+        return JSONResponse(content=json.dumps({"message": "There is no such movie in database."}), status_code=404)
     else:
-        return JSONResponse(content=[jsonable_encoder(schemas.Movie.from_orm(result)) for result in results])
+        return JSONResponse(content=[jsonable_encoder(schemas.Movie.from_orm(result)) for result in results], status_code=200)
     
+
 @app.get("/not-found")
 def not_found_page(request: Request, q: str):
     return templates.TemplateResponse('not_found.html', {"request": request, "q": q}, status_code=404)

@@ -162,13 +162,17 @@ searchButton.addEventListener('click', (event) => {
             }
         })
             .then(response => {
-                console.log('Response from backend:', response);
                 if (response.status == 404) {
-                    query = response.url.split('?')[1]
-                    window.location.href = '/not-found?q=' + query
-                }
-                else if (String(response.status).startsWith('2')) {
-                    response // TODO: complete it.
+                    window.location.href = '/not-found?q=' + searchData;
+                } else if (String(response.status).startsWith('2')) {
+                    response.json()
+                        .then((json) => {
+                            movieUrl = '/movies/' + String(json[0].id);
+                            window.location.href = movieUrl;
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                        });
                 }
             })
             .catch(error => {
@@ -176,3 +180,25 @@ searchButton.addEventListener('click', (event) => {
             });
     }
 });
+
+
+// It is used to trigger searchButton when `enter` key pressed.
+searchInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        searchButton.click();
+    }
+});
+
+
+// IT IS NOT USED.
+function showCloseSearchList(results, open = false) {
+    searchListOpened = searchInput.getAttribute("aria-haspopup");
+    if (searchListOpened == false && open == true) {
+        searchInput.getAttribute("aria-haspopup") = true;
+        // TODO add results.
+    } else if (searchListOpened == true && open == false) {
+        searchInput.getAttribute("aria-haspopup") = false;
+        // TODO add results.
+    } else { }
+}
