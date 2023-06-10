@@ -14,7 +14,6 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-# TODO add positive and negative
 def predict_sentence(sentence):
     words = [word for word in nltk.word_tokenize(sentence) if word not in string.punctuation]
 
@@ -76,6 +75,4 @@ def predict_dialogue(dialogue):
 
     return most_likely_sentiment, round(highest_weighted_probability, 2), pos_neg_net
 
-
-print(predict_dialogue("Did you hear that?  They've shut down the main reactor.  We'll be destroyed for sure.  This is madness!"))
 
