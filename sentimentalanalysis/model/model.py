@@ -18,6 +18,7 @@ def predict_sentence(sentence):
     words = [word for word in nltk.word_tokenize(sentence) if word not in string.punctuation]
 
     scores = []
+    probabilities = []
     for s in sentiments:
         score = 0
         count = 0
@@ -32,7 +33,13 @@ def predict_sentence(sentence):
         else:
             score /= count
         scores.append(score)
-    return sentiments[scores.index(max(scores))], round(sigmoid(max(scores)), 4) * 100
+        probabilities.append(sigmoid(score))
+
+    highest_prob = max(probabilities)
+    highest_prob_index = probabilities.index(highest_prob)
+    score_index = scores.index(scores[highest_prob_index])
+
+    return sentiments[score_index], round(highest_prob * 100, 4)
 
 
 def predict_dialogue(dialogue):
@@ -74,5 +81,4 @@ def predict_dialogue(dialogue):
         pos_neg_net= "neutral"
 
     return most_likely_sentiment, round(highest_weighted_probability, 2), pos_neg_net
-
 
