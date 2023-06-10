@@ -9,6 +9,9 @@ with open('../data/processed/sentiments.pkl', 'rb') as f:
 sentiments = ["anger", "anticipation", "disgust", "fear", "joy", "sadness", "surprise", "trust"]
 
 
+THRESHOLD = 25
+
+
 # for turning the scores [-1, 1] to probabilities
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
@@ -28,6 +31,7 @@ def predict_sentence(sentence):
                 count += 1
             except KeyError:
                 continue
+        # prevent divison by zero
         if count == 0:
             score = 0
         else:
@@ -78,7 +82,7 @@ def predict_dialogue(dialogue):
     elif most_likely_sentiment in ["joy", "trust"]:
         pos_neg_net = "positive"
     else:
-        pos_neg_net= "neutral"
+        pos_neg_net = "neutral"
 
     return most_likely_sentiment, round(highest_weighted_probability, 2), pos_neg_net
 
