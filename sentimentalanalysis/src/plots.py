@@ -3,9 +3,7 @@ import seaborn as sb
 import sentimentalanalysis.model.model as model
 import pandas as pd
 
-# without labels
-# TODO sentiment change of characters
-# TODO average probability for each sentiment
+from sentimentalanalysis.tests import tests
 
 # with SemEval
 # TODO accuracy
@@ -66,4 +64,38 @@ sb.barplot(data=average_probability, x='sentiment', y='probability', palette='Bl
 plt.xlabel('Sentiment')
 plt.ylabel('Average Probability')
 plt.title('Average Probability for Each Sentiment')
+plt.show()
+
+
+semeval = pd.read_csv("../data/labeled/SemEvalTest.txt", sep='\t', engine='python', header=0)
+semeval = semeval.drop(["ID"], axis=1)
+
+semeval2 = pd.read_csv("../data/labeled/SemEvalTrain.txt", sep='\t', engine='python', header=0)
+semeval2 = semeval2.drop(["ID"], axis=1)
+
+semevalResult = []
+semeval2Result = []
+
+accuracy_test = tests.evaluate(semeval, semevalResult)
+accuracy_train = tests.evaluate(semeval2, semeval2Result)
+
+semevalResult = pd.DataFrame(semevalResult, columns=["sentiment", "probability", "valence"])
+
+# Calculate the sentiment distribution for the SemEval test dataset
+semeval_sentiment_counts = semevalResult['sentiment'].value_counts()
+
+# Plot the sentiment distribution of the SemEval test dataset
+plt.figure(figsize=(8, 6))
+sb.barplot(x=semeval_sentiment_counts.index, y=semeval_sentiment_counts.values)
+plt.xlabel('Sentiment')
+plt.ylabel('Count')
+plt.title('Sentiment Distribution in SemEval Test Dataset')
+plt.show()
+
+# Plotting the bar plot
+data = {'Test': accuracy_test, 'Train': accuracy_train}
+plt.bar(data.keys(), data.values())
+plt.xlabel('Dataset')
+plt.ylabel('Accuracy')
+plt.title('Accuracy of Sentiment Analysis Model on SemEval Dataset')
 plt.show()
