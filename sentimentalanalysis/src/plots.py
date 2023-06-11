@@ -1,5 +1,3 @@
-import random
-
 import matplotlib.pyplot as plt
 import seaborn as sb
 import sentimentalanalysis.model.model as model
@@ -26,9 +24,6 @@ for index, row in script.iterrows():
 results = pd.DataFrame(results, columns=["character", "sentiment", "probability", "valence"])
 value_counts = results['sentiment'].value_counts()
 value_counts = value_counts.sample(frac=1)
-
-
-
 
 
 # Histogram
