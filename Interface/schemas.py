@@ -4,9 +4,9 @@ from datetime import date as _date
 from typing import Optional
 
 class MovieUpdate(BaseModel):
-    name: str = Field(min_length=1, max_length=100)    
-    date: Optional[_date] = None
+    id: int
     description: Optional[str] = None
+    # speakers: list[Speaker]
 
 class Movie(BaseModel):
     id: int

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Julius Sans One' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="icon" type="image/png" rel="noopener" target="_blank" href="/static/favicon.ico">
     <title> Sentiment Analysis on Movie Scripts and Audio - S.A.M.S.A </title>
 </head>
@@ -38,7 +38,11 @@
     </div>
 
     <div class="main-frame">
-        <h1>404 - Not Found</h1>
+        <div class="movie">
+            <h1 class="movie-name">{{m.name}} - {{m.movie_id}}</h1>
+            <p class="movie-description">{{m.description}}</p>
+            <div class="movie-graphs"></div>
+        </div>
     </div>
 
     <footer>

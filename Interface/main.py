@@ -6,6 +6,7 @@ import os
 import shutil
 import json
 import logging
+from SpeechRecognition.src.speaker_diarization import SpeakerDiarization
 
 SUPPORTED_EXTENSIONS = [".mp3", ".mp4", ".wav", ".scrt"]
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -23,7 +24,7 @@ logging.basicConfig(
     ]
 )
 
-from typing import Optional, List
+from typing import Optional, List, Union
 from fastapi import FastAPI, Request, File, UploadFile, Response, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
@@ -54,16 +55,31 @@ async def index_view(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "message": "message"})
 
 @app.get("/database", response_class=HTMLResponse)
-async def database_view(request: Request):
-    return templates.TemplateResponse("database.html", {"request": request})
+async def database_view(request: Request, db: models.Session = Depends(database.get_db)):
+    movies = db.query(models.MovieDB).all()
+    return templates.TemplateResponse("database.html", {"request": request, "movies": movies})
 
 @app.get("/authors", response_class=HTMLResponse)
 async def authors_view(request: Request):
     return templates.TemplateResponse("authors.html", {"request": request})
 
-@app.get("/movies/{id}", response_class=HTMLResponse)
-async def movie_view(request: Request):
-    return templates.TemplateResponse("movie.html", {"request": request})
+@app.get("/movies/{movie_id}", response_class=HTMLResponse)
+async def movie_view(request: Request, movie_id: int, db: models.Session = Depends(database.get_db)):
+    movie = db.query(models.MovieDB).filter(models.MovieDB.id == movie_id).first()
+    if movie == None:
+        return templates.TemplateResponse("not_found.html", {"request": request})
+    movie_id = movie.id
+    name, extension = os.path.splitext(movie.name)
+    description = movie.description
+    # speakers => 
+    # TODO: show graphs.
+    m = {
+        'movie_id': movie_id,
+        'name': name,
+        'extension': extension,
+        'description': description
+    }
+    return templates.TemplateResponse("movie.html", {"request": request, "m": m})
 
 
 ##################################
@@ -124,19 +140,22 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
 
 # These two methods are not going to be rendered.
 @app.put("/m/{id}")
-async def update_movie_info(id: int, movie: schemas.Movie, db: models.Session = Depends(database.get_db)):
+async def update_movie_info(id: int, movie: schemas.MovieUpdate, db: models.Session = Depends(database.get_db)):
     db_movie = db.query(models.MovieDB).filter(models.MovieDB.id == id).first()
     if db_movie is None:
         logging.info('There is no such movie `{}` to be updated'.format(id))
         return JSONResponse(content=json.dumps({"error": "There is no such movie."}), status_code=404)
     else:
-        db_movie.name = movie.name
-        db_movie.date = movie.date    # TODO: date should raise some exceptions/
+        # db_movie.name = movie.name    # TODO: the name of the movie shouldn't be changed.
+        # db_movie.date = movie.date    # TODO: date should raise some exceptions/
         db_movie.description = movie.description
+        # TODO: speaker names can be changed here.
+        print(movie)
+        db.add(db_movie)
         db.commit()
         db.refresh(db_movie)
         logging.info('Movie `{}` has been successfully updated.'.format(db_movie.id))
-        return JSONResponse(content=json.dumps(db_movie))
+        return JSONResponse(content=jsonable_encoder(schemas.Movie.from_orm(db_movie)))
 
 @app.delete("/m/{id}", status_code=204)
 async def delete_movie(id: int, db:models.Session = Depends(database.get_db)):
@@ -171,5 +190,13 @@ def search(q: str, db: models.Session = Depends(database.get_db)):
     
 
 @app.get("/not-found")
-def not_found_page(request: Request, q: str):
+def not_found_page(request: Request, q: str = ""):
     return templates.TemplateResponse('not_found.html', {"request": request, "q": q}, status_code=404)
+
+@app.get("/test")
+def not_found_page(request: Request):
+    print('./in/converted.wav')
+    speech = SpeakerDiarization('./in/converted.wav')
+    speech.get_text()
+    return JSONResponse(content=json.dumps('success'), status_code=200)
+    # TODO: remove

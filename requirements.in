@@ -12,6 +12,8 @@ MoviePy
 scipy
 speechbrain
 transformers
+pyannote.audio
+whisper
 
 
 git+https://github.com/huggingface/datasets.git

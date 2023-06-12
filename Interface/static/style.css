@@ -6,7 +6,7 @@ body {
     align-items: center;
     background-color: #F8F7F2;
     color: #014012;
-    font-family: 'Julius Sans One';
+    font-family: 'Montserrat';
     margin: 0;
     padding: 0;
 }
@@ -117,7 +117,7 @@ input.submit-button {
     color: #F8F7F2;
     cursor: pointer;
     display: block;
-    font-family: 'Julius Sans One';
+    font-family: 'Montserrat';
     font-size: 14px;
     font-weight: lighter;
     font-style: normal;
@@ -137,7 +137,7 @@ label.dnd {
     cursor: pointer;
     display: block;
     text-align: center;
-    font-family: 'Julius Sans One';
+    font-family: 'Montserrat';
     font-size: 18px;
     font-weight: lighter;
     font-style: normal;
@@ -188,6 +188,7 @@ footer {
     background: #278143;
 }
 
+/* File upload */
 div.uploaded-file {
     display: inline-flex;
     flex-direction: column;
@@ -204,7 +205,7 @@ button.cancel-button {
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     display: block;
-    font-family: 'Julius Sans One';
+    font-family: 'Montserrat';
     font-size: 14px;
     font-weight: lighter;
     font-style: normal;
@@ -232,7 +233,6 @@ div.buttons {
     margin-right: 1rem;
     text-align: center;
 }
-
 
 progress {
     width: 290px;
@@ -265,6 +265,7 @@ progress::-moz-progress-bar {
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Search */
 input.search-input {
     display: flex;
     justify-content: center;
@@ -281,7 +282,7 @@ input.search-input {
 
 button.search-button {
     display: block;
-    font-family: 'Julius Sans One';
+    font-family: 'Montserrat';
     background-color: #278143;
     height: 2.5rem;
     width: 5.5rem;
@@ -310,3 +311,78 @@ section.search-bar {
 ul.searchList {}
 
 li.searchElement {} */
+
+
+/* Movie entries. */
+.movie-table {
+    font-size: 20px;
+    background-color: rgb(218, 218, 218);
+    border-radius: 10px;
+    padding: 20px;
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.movie-table td {
+    text-align: center;
+}
+
+th,
+td {
+    padding: 8px;
+    border-bottom: 1px solid black;
+}
+
+input[type=text].movie-inp-chg {
+    border-radius: 25px;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.movie-link {
+    text-decoration: none;
+    color: #5e1b9d;
+}
+
+.movie-link:hover {
+    opacity: 50%;
+}
+
+.movie-link:active {
+    opacity: 100%;
+    color: #551A8B;
+}
+
+.movie-btn {
+    align-self: center;
+    border: None;
+    border-radius: 5px;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    font-size: 20px;
+    width: 2.5rem;
+    box-shadow: 1px 1px 4px;
+}
+
+.movie-btn:hover {
+    opacity: 65%;
+}
+
+.movie-btn:active {
+    opacity: 90%;
+}
+
+.red {
+    background-color: rgb(255, 77, 77);
+}
+
+.green {
+    background-color: rgb(29, 126, 29);
+}

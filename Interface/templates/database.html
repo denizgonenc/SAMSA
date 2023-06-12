@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/static/style.css">
     <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
-    <link href='https://fonts.googleapis.com/css?family=Julius Sans One' rel='stylesheet'>
+    <!-- <link rel="stylesheet" href='/static/font-awesome/fonts.css'> -->
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat'>
     <link rel="icon" type="image/png" rel="noopener" target="_blank" href="/static/favicon.ico">
     <title> Sentiment Analysis on Movie Scripts and Audio - S.A.M.S.A </title>
 </head>
@@ -39,6 +40,57 @@
     </div>
 
     <div class="main-frame">
+
+        <h1> Database </h1>
+
+        <table class="movie-table">
+
+            <thead>
+                <!-- id, name, <only this one changable>description, speakers, files, save, delete -->
+                <tr>
+                    <th> Id </th>
+                    <th> Name </th>
+                    <th> Description </th>
+                    <th> Speakers </th>
+                    <th> Files </th>
+                    <th> </th> <!--Save-->
+                    <th> </th> <!--Delete-->
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for movie in movies %}
+
+                <tr class="movie-row">
+                    <td>{{ movie.id }}</td>
+                    <td><a class="movie-link" href="/movies/{{movie.id}}"> {{ movie.name }} </a></td>
+                    <td><input class="movie-inp-chg" value="{{ movie.description }}" type=text></td>
+                    <td>
+                        <ul>
+                            {% for speaker in movie.speakers %}
+                            <li><input class="movie-inp-chg" type="text" value="{{ movie.description }}"></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            {% for file in movie.files %}
+                            <li> <a href="/{{movie.file.url}}"> {{ movie.file.name }} </a> </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td><button class="movie-btn green" id="save-{{movie.id}}"> <i class="fa fa-save"
+                                aria-hidden="true"></i> </button></td>
+                    <td><button class="movie-btn red" id="delete-{{movie.id}}"> <i class="fa fa-trash"
+                                aria-hidden="true"></i> </button></td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+
     </div>
 
     <footer>
@@ -46,6 +98,7 @@
     </footer>
 
     <script src="/static/search.js"></script>
+    <script src="/static/database.js"></script>
 
 </body>
 
