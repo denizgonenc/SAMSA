@@ -41,9 +41,9 @@ def mp4_to_wav(uploaded_file: UploadFile, output_directory: str): # NOTE looks l
     return output_file_path    # Returning wav file path.
 
 
-####################
-# Speaker Commands #
-####################
+#####################
+# Speaker Functions #
+#####################
 
 def get_speakers(movie_path: str, name: str):
     with open(join(movie_path, name), 'r') as json_file:
@@ -74,7 +74,7 @@ def change_speaker_name(movie_path: str, name: str, old_s_name: str, new_s_name:
     return 'ok'
 
 ####################
-# Files Commands #
+# Files Functions  #
 ####################
 
 def get_files(movie_path: str):
