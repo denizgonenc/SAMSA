@@ -8,16 +8,16 @@ sentiment_scores = {"positive": {}, "negative": {}, "anger": {}, "anticipation":
 
 # Read scores from pickle
 for s in sentiments:
-    with open('../data/processed/sentiments/' + s + '.pkl', 'rb') as f:
+    with open('../../data/processed/sentiments/' + s + '.pkl', 'rb') as f:
         temp = dict(pickle.load(f))[s]
         sentiment_scores[s] = temp
 
 
-with open("../data/processed/sentiments.pkl", "wb") as f:
+with open("../../data/processed/sentiments.pkl", "wb") as f:
     pickle.dump(sentiment_scores, f)
 
 
-with open('../data/processed/sentiments.pkl', 'rb') as f:
+with open('../../data/processed/sentiments.pkl', 'rb') as f:
     sentiment_scores = pickle.load(f)
 
 min_value = float('inf')  # Set initial minimum value to positive infinity
@@ -46,6 +46,6 @@ for s in sentiments:
 
 
 # Save the normalized sentiment scores to the pickle file
-with open("../data/processed/normalized_sentiments.pkl", "wb") as f:
+with open("../../data/processed/normalized_sentiments.pkl", "wb") as f:
     pickle.dump(sentiment_scores, f)
 
