@@ -1,10 +1,7 @@
 numpy
 pandas
 matplotlib
-sklearn
-
-
-python-dotenv
+scikit-learn
 SpeechRecognition
 PyAudio
 pydub
