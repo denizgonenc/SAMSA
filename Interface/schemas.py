@@ -6,7 +6,7 @@ from typing import Optional
 class MovieUpdate(BaseModel):
     id: int
     description: Optional[str] = None
-    # speakers: list[Speaker]
+    speakers: list[dict]
 
 class Movie(BaseModel):
     id: int
