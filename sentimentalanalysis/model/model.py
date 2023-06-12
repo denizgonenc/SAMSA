@@ -3,13 +3,10 @@ import nltk
 import string
 import numpy as np
 
-with open('../data/processed/sentiments.pkl', 'rb') as f:
+with open('../data/processed/normalized_sentiments.pkl', 'rb') as f:
     sentiment_scores = pickle.load(f)
 
 sentiments = ["anger", "anticipation", "disgust", "fear", "joy", "sadness", "surprise", "trust"]
-
-
-THRESHOLD = 25
 
 
 # for turning the scores [-1, 1] to probabilities
