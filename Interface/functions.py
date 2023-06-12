@@ -90,3 +90,13 @@ def get_files(movie_path: str):
                 "url": join("/files", file_id, file)
             })
     return files
+
+
+def save_JSON(json_file_path,data):
+
+    with open(json_file_path, 'w') as json_file:
+        dump = json.dumps(data, indent=4)
+        json_file.write(dump)
+
+
+

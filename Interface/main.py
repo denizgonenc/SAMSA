@@ -137,21 +137,28 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
         shutil.rmtree(db_movie_dir_path)
     os.mkdir(db_movie_dir_path)
 
-    if file_extension == ".json":    # .json file can be stored directly
-        json_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
-        with open(json_file_path, 'wb') as json_file:
-            json_file.writelines(uploaded_file.file.readlines())
+    if file_extension == ".mp3":    # .mp3 file should be converted into wav.
+        wav_file_path = functions.mp3_to_wav(uploaded_file, db_movie_dir_path)
+
+    elif file_extension == ".mp4":    # .mp4 file should be converted into wav.
+        wav_file_path = functions.mp4_to_wav(uploaded_file, db_movie_dir_path)
 
     elif file_extension == ".wav":    # Also, .wav file can be stored directly.
         wav_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
         with open(wav_file_path, "wb") as wav_file:
             wav_file.writelines(uploaded_file.file.readlines())
     
-    elif file_extension == ".mp3":    # .mp3 file should be converted into wav.
-        final_path = functions.mp3_to_wav(uploaded_file, db_movie_dir_path)
+    if file_extension != ".json":    # .json file can be stored directly
+        temp_speaker_diarizaton = SpeakerDiarization()
+        json_data = temp_speaker_diarizaton.get_text(wav_file_path)
 
-    elif file_extension == ".mp4":    # .mp4 file should be converted into wav.
-        final_path = functions.mp4_to_wav(uploaded_file, db_movie_dir_path)
+        json_data_file =  os.path.join(db_movie_dir_path, file_name + ".json")
+        functions.save_JSON(json_data_file, json_data)
+
+    else:
+        json_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
+        with open(json_file_path, 'wb') as json_file:
+            json_file.writelines(uploaded_file.file.readlines())
 
     final_path = json_file_path if file_extension == '.json' else wav_file_path
     logging.info('The file: "' + final_path + '" is successfully uploaded')

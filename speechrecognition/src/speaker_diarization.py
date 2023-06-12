@@ -1,3 +1,4 @@
+import json
 import whisper
 import datetime
 import torch
@@ -17,8 +18,7 @@ from sklearn.metrics import silhouette_score
 class SpeakerDiarization:
     MODEL_CACHE_FILE = 'model_cache.pkl'
 
-    def __init__(self, file_name):
-        self.file_name = file_name
+    def __init__(self):
         self.model = self.load_model()
 
     def load_model(self):
@@ -39,11 +39,11 @@ class SpeakerDiarization:
         for param in model.parameters():
             param.requires_grad = False
 
-    def get_text(self):
-        result = self.model.transcribe(self.file_name)
+    def get_text(self, file_name):
+        result = self.model.transcribe(file_name)
         segments = result["segments"]
 
-        with contextlib.closing(wave.open(self.file_name, 'r')) as f:
+        with contextlib.closing(wave.open(file_name, 'r')) as f:
             frames = f.getnframes()
             rate = f.getframerate()
             duration = frames / float(rate)
@@ -54,7 +54,7 @@ class SpeakerDiarization:
             start = segment["start"]
             end = min(duration, segment["end"])
             clip = Segment(start, end)
-            waveform, sample_rate = audio.crop(self.file_name, clip)
+            waveform, sample_rate = audio.crop(file_name, clip)
 
             if waveform.ndim > 1:
                 waveform = waveform[0]
@@ -95,9 +95,17 @@ class SpeakerDiarization:
         def time(secs):
             return datetime.timedelta(seconds=round(secs))
 
+        return_arr = []
+        temp_str = ''
         for (i, segment) in enumerate(segments):
+            temp_dict = {}
+            
             if i == 0 or segments[i - 1]["speaker"] != segment["speaker"]:
                 print("\n" + segment["speaker"] + ' ' + str(time(segment["start"])) + '\n')
+                temp_str = segment["speaker"]
             print(segment["text"][1:] + ' ')
-
-
+            temp_dict['speaker'] = temp_str
+            temp_dict['line'] = segment["text"][1:] 
+            return_arr.append(temp_dict)
+        print(return_arr)
+        return return_arr
