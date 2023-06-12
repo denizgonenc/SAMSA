@@ -8,7 +8,7 @@ sentiment_scores = {"positive": {}, "negative": {}, "anger": {}, "anticipation":
 
 # Read scores from pickle
 for s in sentiments:
-    with open('../data/processed/sentiments/' + s + '.pkl', 'rb') as f:
+    with open('../../data/processed/sentiments/' + s + '.pkl', 'rb') as f:
         temp = dict(pickle.load(f))[s]
         sentiment_scores[s] = temp
 

@@ -6,7 +6,6 @@ import pandas as pd
 from sentimentalanalysis.tests import tests
 
 # with SemEval
-# TODO accuracy
 # TODO Bar Plot
 
 script = pd.read_csv("../data/raw/starwars/SW_EpisodeVI.txt", sep='" "', engine='python', skiprows=[0])
@@ -20,6 +19,7 @@ for index, row in script.iterrows():
     results.append((row["character"], s, p, v))
 
 results = pd.DataFrame(results, columns=["character", "sentiment", "probability", "valence"])
+results.drop(results[results['sentiment'] == 'none'].index, inplace=True)
 value_counts = results['sentiment'].value_counts()
 value_counts = value_counts.sample(frac=1)
 

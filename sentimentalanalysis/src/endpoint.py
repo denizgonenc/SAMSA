@@ -16,3 +16,5 @@ def predict_script(path):
 
     results = pd.DataFrame(results, columns=["speaker", "sentiment", "probability", "valence"])
     return results
+
+
