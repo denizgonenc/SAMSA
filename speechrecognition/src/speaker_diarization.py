@@ -1,3 +1,4 @@
+import json
 import whisper
 import datetime
 import torch
@@ -94,9 +95,17 @@ class SpeakerDiarization:
         def time(secs):
             return datetime.timedelta(seconds=round(secs))
 
+        return_arr = []
+        temp_str = ''
         for (i, segment) in enumerate(segments):
+            temp_dict = {}
+            
             if i == 0 or segments[i - 1]["speaker"] != segment["speaker"]:
                 print("\n" + segment["speaker"] + ' ' + str(time(segment["start"])) + '\n')
+                temp_str = segment["speaker"]
             print(segment["text"][1:] + ' ')
-
-
+            temp_dict['speaker'] = temp_str
+            temp_dict['line'] = segment["text"][1:] 
+            return_arr.append(temp_dict)
+        print(return_arr)
+        return return_arr
