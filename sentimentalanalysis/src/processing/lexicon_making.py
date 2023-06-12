@@ -9,7 +9,7 @@ from gensim.models import KeyedVectors
 model = KeyedVectors.load('model.kv')
 
 lemmatizer = WordNetLemmatizer()
-nrc = pd.read_csv('../data/processed/processed_nrc.csv', index_col=0)
+nrc = pd.read_csv('../../data/processed/processed_nrc.csv', index_col=0)
 
 sentiment_scores = {"positive": {}, "negative": {}, "anger": {}, "anticipation": {}, "disgust": {},
                     "fear": {}, "joy": {}, "sadness": {}, "surprise": {}, "trust": {}}
@@ -54,5 +54,5 @@ for i in range(len(words)):
         sentiment_scores[s][w1] = total / count
 
 
-with open("../data/processed/sentiments/disgust.pkl", "wb") as f:
+with open("../../data/processed/sentiments/disgust.pkl", "wb") as f:
     pickle.dump(sentiment_scores, f)
