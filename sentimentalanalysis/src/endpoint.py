@@ -11,7 +11,7 @@ def predict_script(path):
 
     results = []
     for index, row in script.iterrows():
-        s, p, v = model.predict_dialogue(row["dialogue"])
+        s, p, v = model.predict_dialogue(row["line"])
         results.append((row["speaker"], s, p, v))
 
     results = pd.DataFrame(results, columns=["speaker", "sentiment", "probability", "valence"])
