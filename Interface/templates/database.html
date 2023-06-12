@@ -63,20 +63,23 @@
                 {% for movie in movies %}
 
                 <tr class="movie-row">
-                    <td>{{ movie.id }}</td>
-                    <td><a class="movie-link" href="/movies/{{movie.id}}"> {{ movie.name }} </a></td>
-                    <td><input class="movie-inp-chg" value="{{ movie.description }}" type=text></td>
+                    <td>{{ movie['movie'].id }}</td>
+                    <td><a class="movie-link" href="/movies/{{movie['movie'].id}}"> {{
+                            ''.join(movie['movie'].name.split('.')[0:-1]) }}
+                        </a></td>
+                    <td><input class="movie-inp-chg" value="{{ movie['movie'].description }}" type=text></td>
                     <td>
                         <ul>
-                            {% for speaker in movie.speakers %}
-                            <li><input class="movie-inp-chg" type="text" value="{{ movie.description }}"></li>
+                            {% for speaker in movie['speakers'] %}
+                            <li><input class="movie-inp-chg" type="text" value="{{ speaker }}" name="{{ speaker }}">
+                            </li>
                             {% endfor %}
                         </ul>
                     </td>
                     <td>
                         <ul>
-                            {% for file in movie.files %}
-                            <li> <a href="/{{movie.file.url}}"> {{ movie.file.name }} </a> </li>
+                            {% for file in movie['files'] %}
+                            <li> <a class="file-link" href="{{ file['url'] }}"> {{ file['name'] }} </a> </li>
                             {% endfor %}
                         </ul>
                     </td>

@@ -19,15 +19,19 @@ function save_(event) {
     movieId = movieChildren[0].innerHTML;
     movieDescription = movieChildren[2].children[0].value;
 
-    // TODO: Don't forget to add the speaker changing parts.
+    movieSpeakers = movieChildren[3].children[0].children;
 
-    a = JSON.stringify({
-        "movie": {
-            "id": movieId,
-            "description": movieDescription
+    var speakers = [];
+    for (var i = 0; i < movieSpeakers.length; i++) {
+        tempSpeaker = movieSpeakers[i].children[0];
+        if (tempSpeaker.name !== tempSpeaker.value) {
+            var speaker = {
+                "old_name": tempSpeaker.name,
+                "new_name": tempSpeaker.value
+            }
+            speakers.push(speaker);
         }
-    });
-    console.log(a);
+    }
 
     fetch('/m/' + movieId, {
         method: 'PUT',
@@ -36,7 +40,8 @@ function save_(event) {
         },
         body: JSON.stringify({
             "id": movieId,
-            "description": movieDescription
+            "description": movieDescription,
+            "speakers": speakers
         })
     })
         .then(response => {
@@ -44,9 +49,8 @@ function save_(event) {
                 window.location.href = '/not-found?q=' + searchData;
             } else if (String(response.status).startsWith('2')) {
                 response.json()
-                    .then((json) => {
-                        console.log(json);
-                        // window.location.href = '/database';
+                    .then(() => {
+                        window.location.href = '/database';
                     })
                     .catch((error) => {
                         console.error(error);
@@ -64,26 +68,26 @@ function delete_(event) {
 
     movieId = movieChildren[0].innerHTML;
 
-    // fetch('/m/' + movieId, {
-    //     method: 'DELETE',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
-    //     .then(response => {
-    //         if (response.status == 404) {
-    //             window.location.href = '/not-found?q=' + searchData;
-    //         } else if (String(response.status).startsWith('2')) {
-    //             response.json()
-    //                 .then(() => {
-    //                     window.location.href = '/database';
-    //                 })
-    //                 .catch((error) => {
-    //                     console.error(error);
-    //                 });
-    //         }
-    //     })
-    //     .catch(error => {
-    //         console.error('Error:', error);
-    //     });
+    fetch('/m/' + movieId, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response.status == 404) {
+                window.location.href = '/not-found?q=' + searchData;
+            } else if (String(response.status).startsWith('2')) {
+                response.json()
+                    .then(() => {
+                        window.location.href = '/database';
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
