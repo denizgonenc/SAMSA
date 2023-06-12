@@ -1,5 +1,5 @@
 import pandas as pd
-import sentimentalanalysis.model.model as model
+import SentimentalAnalysis.model.model as model
 
 semeval = pd.read_csv("../data/labeled/SemEvalTest.txt", sep='\t', engine='python', header=0)
 semeval = semeval.drop(["ID"], axis=1)

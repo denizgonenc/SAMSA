@@ -72,7 +72,7 @@ async def database_view(request: Request, db: models.Session = Depends(database.
         movie_path = os.path.join(MOVIES_PATH, str(movie.id))
 
         temp_movie['movie'] = movie
-        temp_movie['speakers'] = functions.get_speakers(movie_path, movie.name)
+        temp_movie['speakers'] = functions.get_speakers(movie_path, os.path.splitext(movie.name)[0] + '.json')
         temp_movie['files'] = functions.get_files(movie_path)
         temp_movies.append(temp_movie)
 
@@ -176,7 +176,12 @@ async def update_movie_info(id: int, movie: schemas.MovieUpdate, db: models.Sess
 
         # To change speaker names.        
         for speaker in movie.speakers:
-            msg = functions.change_speaker_name(movie_path, db_movie.name, speaker["old_name"], speaker["new_name"])
+            msg = functions.change_speaker_name(
+                movie_path,
+                os.path.splitext(db_movie.name)[0] + '.json',
+                speaker["old_name"],
+                speaker["new_name"]
+                )
             if msg != 'ok':
                 logging.warning(msg)
 

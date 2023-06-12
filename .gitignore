@@ -14,3 +14,4 @@ model_cache.pkl
 /.env
 /__pycache__
 /.idea
+ffmpeg.exe

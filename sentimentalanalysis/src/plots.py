@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import seaborn as sb
-import sentimentalanalysis.model.model as model
+import SentimentalAnalysis.model.model as model
 import pandas as pd
 
-from sentimentalanalysis.tests import tests
+from SentimentalAnalysis.tests import tests
 
 # with SemEval
 # TODO Bar Plot

@@ -3,7 +3,7 @@ import json
 from os.path import splitext, join, abspath, basename
 from os import remove, listdir
 
-from moviepy.editor import VideoFileClip
+from moviepy.editor import VideoFileClip, AudioFileClip
 from pydub import AudioSegment
 from fastapi import UploadFile
 
@@ -16,11 +16,11 @@ def mp3_to_wav(uploaded_file: UploadFile, output_directory: str):
     filename, _ = splitext(uploaded_file.filename)
     temp_file_path = join(output_directory, uploaded_file.filename)
     output_file_path = join(output_directory, filename + '.wav')
-    print(temp_file_path)
     with open(temp_file_path, "wb") as f:
         f.write(uploaded_file.file.read())
-    audio = AudioSegment.from_file(temp_file_path)
-    audio.export(output_file_path, format='wav')
+
+    sound = AudioFileClip(temp_file_path)
+    sound.write_audiofile(output_file_path, 44100, 2)
     remove(temp_file_path)
     return output_file_path    # Returning output file path.
 
@@ -46,7 +46,7 @@ def mp4_to_wav(uploaded_file: UploadFile, output_directory: str): # NOTE looks l
 #####################
 
 def get_speakers(movie_path: str, name: str):
-    with open(join(movie_path, name), 'r') as json_file:
+    with open(join(movie_path, name), 'r', encoding='utf-8') as json_file:
         data = json.load(json_file)
         speakers = []
         for d in data:
@@ -97,6 +97,3 @@ def save_JSON(json_file_path,data):
     with open(json_file_path, 'w') as json_file:
         dump = json.dumps(data, indent=4)
         json_file.write(dump)
-
-
-
