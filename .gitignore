@@ -1,8 +1,8 @@
 /env/
 /in/
 /out/
-/movies/
 /__pycache__/
+/Interface/movies
 /Interface/__pycache__/
 /Interface/samsa.db
 /Interface/samsa.log
@@ -13,3 +13,4 @@ model_cache.pkl
 /.ipynb_checkpoints/
 /.env
 /__pycache__
+/.idea
