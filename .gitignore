@@ -1,4 +1,15 @@
 /env/
 /in/
 /out/
+/movies/
+/__pycache__/
+/Interface/__pycache__/
+/Interface/samsa.db
+/Interface/samsa.log
+/SentimentalAnalysis/__pycache__/
+/SpeechRecognition/__pycache__/
+/SpeechRecognition/src/__pycache__/
+model_cache.pkl
 /.ipynb_checkpoints/
+/.env
+/__pycache__
