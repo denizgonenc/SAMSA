@@ -7,6 +7,12 @@ import shutil
 import json
 import logging
 from SpeechRecognition.src.speaker_diarization import SpeakerDiarization
+#
+import nltk
+nltk.download('punkt')
+
+from SentimentalAnalysis.src.endpoint import predict_script
+#
 
 SUPPORTED_EXTENSIONS = [".mp3", ".mp4", ".wav", ".json"]
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -90,13 +96,19 @@ async def movie_view(request: Request, movie_id: int, db: models.Session = Depen
     movie_id = movie.id
     name, extension = os.path.splitext(movie.name)
     description = movie.description
-    # speakers => 
+    movie_path = os.path.join(MOVIES_PATH, str(movie_id))
+    speakers = functions.get_speakers(movie_path, name + '.json')
+    files = functions.get_files(movie_path)
+
     # TODO: show graphs.
     m = {
         'movie_id': movie_id,
         'name': name,
         'extension': extension,
-        'description': description
+        'description': description,
+        'speakers': speakers,
+        'files': files,
+        'graphs': 1
     }
     return templates.TemplateResponse("movie.html", {"request": request, "m": m})
 
@@ -131,12 +143,17 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
         logging.error(e.message)
         return JSONResponse(content=json.dumps({'error': e.message}), status_code=400)   
 
-    # Create directory for uploaded file and store it.
+    ########################################################
+    ### Create directory for uploaded file and store it. ###
+    ########################################################
     db_movie_dir_path = os.path.join(MOVIES_PATH, str(db_movie.id))
     if os.path.isdir(db_movie_dir_path):
         shutil.rmtree(db_movie_dir_path)
     os.mkdir(db_movie_dir_path)
 
+    #############################
+    ### Creates related files ###
+    #############################
     if file_extension == ".mp3":    # .mp3 file should be converted into wav.
         wav_file_path = functions.mp3_to_wav(uploaded_file, db_movie_dir_path)
 
@@ -151,17 +168,36 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
     if file_extension != ".json":    # .json file can be stored directly
         temp_speaker_diarizaton = SpeakerDiarization()
         json_data = temp_speaker_diarizaton.get_text(wav_file_path)
+        for d_idx, d in enumerate(json_data):
+            results = {
+                'sentiment': None,
+                'probability': None,
+                'valence': None
+            }
+            json_data[d_idx]['results'] = results
 
-        json_data_file =  os.path.join(db_movie_dir_path, file_name + ".json")
-        functions.save_JSON(json_data_file, json_data)
+        json_file_path =  os.path.join(db_movie_dir_path, file_name + ".json")
+        functions.save_JSON(json_file_path, json_data)
 
     else:
         json_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
         with open(json_file_path, 'wb') as json_file:
             json_file.writelines(uploaded_file.file.readlines())
 
-    final_path = json_file_path if file_extension == '.json' else wav_file_path
-    logging.info('The file: "' + final_path + '" is successfully uploaded')
+    ######################
+    # Sentiment Analysis #
+    ######################
+    sentiment_results = predict_script(json_file_path)
+    for idx in range(len(json_data)):
+        json_data[idx]['results'] = {
+            "sentiment": sentiment_results.iloc[idx]['sentiment'],
+            "probability": sentiment_results.iloc[idx]['probability'],
+            "valence": sentiment_results.iloc[idx]['valence']
+        }
+
+    functions.save_JSON(json_file_path, json_data) 
+    logging.info('The file: "' + json_file_path + '" is successfully uploaded')
+
     return JSONResponse(content=jsonable_encoder(db_movie))
 
 # These two methods are not going to be rendered.
@@ -229,10 +265,13 @@ def search(q: str, db: models.Session = Depends(database.get_db)):
 def not_found_page(request: Request, q: str = ""):
     return templates.TemplateResponse('not_found.html', {"request": request, "q": q}, status_code=404)
 
-@app.get("/test")
-def not_found_page(request: Request):
-    print('./in/converted.wav')
-    speech = SpeakerDiarization('./in/converted.wav')
-    speech.get_text()
-    return JSONResponse(content=json.dumps('success'), status_code=200)
-    # TODO: remove
+# @app.get("/test")
+# def not_found_page(request: Request):
+#     print('./in/converted.wav')
+#     speech = SpeakerDiarization('./in/converted.wav')
+#     speech.get_text()
+#     return JSONResponse(content=json.dumps('success'), status_code=200)
+#     # TODO: remove
+
+# result = predict_script(os.path.join(MOVIES_PATH, '3', 'join.json'))
+# print(type(result))

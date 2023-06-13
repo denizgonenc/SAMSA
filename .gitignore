@@ -7,6 +7,8 @@
 /Interface/samsa.db
 /Interface/samsa.log
 /SentimentalAnalysis/__pycache__/
+/SentimentalAnalysis/model/__pycache__/
+/SentimentalAnalysis/src/__pycache__/
 /SpeechRecognition/__pycache__/
 /SpeechRecognition/src/__pycache__/
 model_cache.pkl
@@ -15,3 +17,4 @@ model_cache.pkl
 /__pycache__
 /.idea
 ffmpeg.exe
+/SentimentalAnalysis/tests/__pycache__

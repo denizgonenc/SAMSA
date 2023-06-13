@@ -39,9 +39,33 @@
 
     <div class="main-frame">
         <div class="movie">
-            <h1 class="movie-name">{{m.name}} - {{m.movie_id}}</h1>
-            <p class="movie-description">{{m.description}}</p>
+            <h1 class="movie-name">{{ m.name }} - {{ m.movie_id }}</h1>
+
+            <div class="movie-first-row">
+                <div class="movie-description">
+                    <h3>Description</h1>
+                        <p>{{ m.description }}</p>
+                </div>
+                <div class="speakers">
+                    <h3>Speakers</h3>
+                    <ul>
+                        {% for speaker in m.speakers %}
+                        <li>{{ speaker }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="files">
+                    <h3>Files</h3>
+                    <ul>
+                        {% for file in m.files %}
+                        <li> <a class="file-link" href="{{ file['url'] }}"> {{ file['name'] }} </a> </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
             <div class="movie-graphs"></div>
+
         </div>
     </div>
 

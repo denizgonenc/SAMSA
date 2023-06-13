@@ -92,7 +92,7 @@ def get_files(movie_path: str):
     return files
 
 
-def save_JSON(json_file_path,data):
+def save_JSON(json_file_path: str, data):
 
     with open(json_file_path, 'w') as json_file:
         dump = json.dumps(data, indent=4)
