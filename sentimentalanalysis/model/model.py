@@ -18,7 +18,6 @@ def predict_sentence(sentence):
     words = [word for word in nltk.word_tokenize(sentence) if word not in string.punctuation]
 
     scores = []
-    probabilities = []
     for s in sentiments:
         score = 0
         count = 0
@@ -34,23 +33,21 @@ def predict_sentence(sentence):
         else:
             score /= count
         scores.append(score)
-        probabilities.append(sigmoid(score))
 
-    highest_prob = max(probabilities)
-    highest_prob_index = probabilities.index(highest_prob)
-    score_index = scores.index(scores[highest_prob_index])
+    highest_score = max(scores)
+    highest_score_index = scores.index(highest_score)
 
-    return sentiments[score_index], round(highest_prob * 100, 4)
+    return sentiments[highest_score_index], highest_score
 
 
 def predict_dialogue(dialogue):
     dialogue = nltk.tokenize.sent_tokenize(dialogue)
     sentiment_counts = {}
-    sentiment_probabilities = {}
+    sentiment_scores = {}
 
     # Calculate sentiment counts and probabilities
     for sentence in dialogue:
-        sentiment, probability = predict_sentence(sentence)
+        sentiment, score = predict_sentence(sentence)
 
         # Update sentiment counts
         if sentiment in sentiment_counts:
@@ -59,21 +56,23 @@ def predict_dialogue(dialogue):
             sentiment_counts[sentiment] = 1
 
         # Update sentiment probabilities
-        if sentiment in sentiment_probabilities:
-            sentiment_probabilities[sentiment] += probability
+        if score in sentiment_scores:
+            sentiment_scores[sentiment] += score
         else:
-            sentiment_probabilities[sentiment] = probability
+            sentiment_scores[sentiment] = score
 
-    # Calculate weighted average of probabilities
-    weighted_probabilities = {}
+    # Calculate weighted average of scores
+    weighted_scores = {}
     for sentiment in sentiment_counts:
-        weighted_probabilities[sentiment] = sentiment_probabilities[sentiment] / sentiment_counts[sentiment]
+        weighted_scores[sentiment] = sentiment_scores[sentiment] / sentiment_counts[sentiment]
 
     # Find the sentiment with the highest weighted probability
-    most_likely_sentiment = max(weighted_probabilities, key=weighted_probabilities.get)
-    highest_weighted_probability = weighted_probabilities[most_likely_sentiment]
+    most_likely_sentiment = max(weighted_scores, key=weighted_scores.get)
+    highest_weighted_score = weighted_scores[most_likely_sentiment]
 
-    pos_neg_net = None
+    if highest_weighted_score == 0:
+        most_likely_sentiment = "none"
+
     if most_likely_sentiment in ["anger", "disgust", "fear", "sadness"]:
         pos_neg_net = "negative"
     elif most_likely_sentiment in ["joy", "trust"]:
@@ -81,5 +80,5 @@ def predict_dialogue(dialogue):
     else:
         pos_neg_net = "neutral"
 
-    return most_likely_sentiment, round(highest_weighted_probability, 2), pos_neg_net
+    return most_likely_sentiment, round(sigmoid(highest_weighted_score), 2), pos_neg_net
 

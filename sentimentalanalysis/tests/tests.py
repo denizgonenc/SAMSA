@@ -15,10 +15,11 @@ def evaluate(test, results):
     total = len(test)
     for index, row in test.iterrows():
         s, p, v = model.predict_dialogue(row['Tweet'])
-        results.append((s, p, v))
+        if s != "none":
+            results.append((s, p, v))
 
-        if row[s]:
-            accurate_sentiment += 1
+            if row[s]:
+                accurate_sentiment += 1
 
     return 100 * accurate_sentiment / total
 

@@ -9,8 +9,21 @@ MoviePy
 scipy
 speechbrain
 transformers
+pyannote.audio
+whisper
+nltk
+gensim
 
 git+https://github.com/huggingface/datasets.git
 git+https://github.com/huggingface/transformers.git
 torchaudio
 librosa
+
+
+fastapi
+uvicorn
+pydantic
+SQLAlchemy
+PyMySQL
+Jinja2
+python-multipart
