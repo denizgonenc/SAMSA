@@ -1,4 +1,4 @@
-import sentimentalanalysis.model.model as model
+import SentimentalAnalysis.model.model as model
 import pandas as pd
 import matplotlib.pyplot as plt
 
