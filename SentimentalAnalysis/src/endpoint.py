@@ -1,5 +1,6 @@
-import sentimentalanalysis.model.model as model
+import SentimentalAnalysis.model.model as model
 import pandas as pd
+import plots as plot
 
 
 def predict_script(path):
@@ -17,4 +18,5 @@ def predict_script(path):
     results = pd.DataFrame(results, columns=["speaker", "sentiment", "probability", "valence"])
     return results
 
-
+result = predict_script("../data/raw/join.json")
+plot.characters_sentiment_plot(result).show()
