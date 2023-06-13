@@ -360,6 +360,21 @@ input[type=text].movie-inp-chg {
     color: #551A8B;
 }
 
+
+.file-link {
+    text-decoration: none;
+    color: #014012;
+}
+
+.file-link:hover {
+    opacity: 50%;
+}
+
+.file-link:active {
+    opacity: 100%;
+    color: #014012;
+}
+
 .movie-btn {
     align-self: center;
     border: None;

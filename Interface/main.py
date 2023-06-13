@@ -8,11 +8,14 @@ import json
 import logging
 from SpeechRecognition.src.speaker_diarization import SpeakerDiarization
 
-SUPPORTED_EXTENSIONS = [".mp3", ".mp4", ".wav", ".scrt"]
+SUPPORTED_EXTENSIONS = [".mp3", ".mp4", ".wav", ".json"]
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 STATIC_PATH = os.path.join(ROOT_PATH, "static")
 TEMPLATES_PATH = os.path.join(ROOT_PATH, "templates")
 MOVIES_PATH = os.path.join(ROOT_PATH, "movies")
+
+if not os.path.isdir(MOVIES_PATH):
+    os.mkdir(MOVIES_PATH)
 
 # Logging module is initialized.
 logging.basicConfig(
@@ -39,7 +42,13 @@ ffmpeg_path = '/ffmpeg.exe'
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=STATIC_PATH), name="static")
+
+# Files added to
+app.mount("/files", StaticFiles(directory=MOVIES_PATH), name="files")
+
+# HTML templates inserted.
 templates = Jinja2Templates(directory=TEMPLATES_PATH)
+
 # Creates db tables.
 database.Base.metadata.create_all(bind=database.engine)
 
@@ -57,7 +66,17 @@ async def index_view(request: Request):
 @app.get("/database", response_class=HTMLResponse)
 async def database_view(request: Request, db: models.Session = Depends(database.get_db)):
     movies = db.query(models.MovieDB).all()
-    return templates.TemplateResponse("database.html", {"request": request, "movies": movies})
+    temp_movies = []
+    for movie in movies:
+        temp_movie = dict()
+        movie_path = os.path.join(MOVIES_PATH, str(movie.id))
+
+        temp_movie['movie'] = movie
+        temp_movie['speakers'] = functions.get_speakers(movie_path, movie.name)
+        temp_movie['files'] = functions.get_files(movie_path)
+        temp_movies.append(temp_movie)
+
+    return templates.TemplateResponse("database.html", {"request": request, "movies": temp_movies})
 
 @app.get("/authors", response_class=HTMLResponse)
 async def authors_view(request: Request):
@@ -118,23 +137,30 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
         shutil.rmtree(db_movie_dir_path)
     os.mkdir(db_movie_dir_path)
 
-    if file_extension == ".scrt":    # .scrt file can be stored directly
-        scrt_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
-        with open(scrt_file_path, 'wb') as scrt_file:
-            scrt_file.writelines(uploaded_file.file.readlines())
+    if file_extension == ".mp3":    # .mp3 file should be converted into wav.
+        wav_file_path = functions.mp3_to_wav(uploaded_file, db_movie_dir_path)
+
+    elif file_extension == ".mp4":    # .mp4 file should be converted into wav.
+        wav_file_path = functions.mp4_to_wav(uploaded_file, db_movie_dir_path)
 
     elif file_extension == ".wav":    # Also, .wav file can be stored directly.
         wav_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
         with open(wav_file_path, "wb") as wav_file:
             wav_file.writelines(uploaded_file.file.readlines())
     
-    elif file_extension == ".mp3":    # .mp3 file should be converted into wav.
-        final_path = functions.mp3_to_wav(uploaded_file, db_movie_dir_path)
+    if file_extension != ".json":    # .json file can be stored directly
+        temp_speaker_diarizaton = SpeakerDiarization()
+        json_data = temp_speaker_diarizaton.get_text(wav_file_path)
 
-    elif file_extension == ".mp4":    # .mp4 file should be converted into wav.
-        final_path = functions.mp4_to_wav(uploaded_file, db_movie_dir_path)
+        json_data_file =  os.path.join(db_movie_dir_path, file_name + ".json")
+        functions.save_JSON(json_data_file, json_data)
 
-    final_path = scrt_file_path if file_extension == '.scrt' else wav_file_path
+    else:
+        json_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
+        with open(json_file_path, 'wb') as json_file:
+            json_file.writelines(uploaded_file.file.readlines())
+
+    final_path = json_file_path if file_extension == '.json' else wav_file_path
     logging.info('The file: "' + final_path + '" is successfully uploaded')
     return JSONResponse(content=jsonable_encoder(db_movie))
 
@@ -146,11 +172,16 @@ async def update_movie_info(id: int, movie: schemas.MovieUpdate, db: models.Sess
         logging.info('There is no such movie `{}` to be updated'.format(id))
         return JSONResponse(content=json.dumps({"error": "There is no such movie."}), status_code=404)
     else:
-        # db_movie.name = movie.name    # TODO: the name of the movie shouldn't be changed.
-        # db_movie.date = movie.date    # TODO: date should raise some exceptions/
+        movie_path = os.path.join(MOVIES_PATH, str(db_movie.id))
+
+        # To change speaker names.        
+        for speaker in movie.speakers:
+            msg = functions.change_speaker_name(movie_path, db_movie.name, speaker["old_name"], speaker["new_name"])
+            if msg != 'ok':
+                logging.warning(msg)
+
+        # To change and save movie objects.
         db_movie.description = movie.description
-        # TODO: speaker names can be changed here.
-        print(movie)
         db.add(db_movie)
         db.commit()
         db.refresh(db_movie)
@@ -159,14 +190,14 @@ async def update_movie_info(id: int, movie: schemas.MovieUpdate, db: models.Sess
 
 @app.delete("/m/{id}", status_code=204)
 async def delete_movie(id: int, db:models.Session = Depends(database.get_db)):
-    db_movie = db.query(models.MovieDB).filter(models.MovieDB.id == id)
+    db_movie = db.query(models.MovieDB).filter(models.MovieDB.id == id).first()
     if db_movie is None:
         logging.info('There is no such movie `{}` to be deleted.'.format(id))
         return JSONResponse(content=json.dumps({"error": "There is no such movie."}), status_code=404)
     else:
         db.delete(db_movie)    # delete from db.
         db.commit()
-        movie_path = os.path.join(MOVIES_PATH, id)
+        movie_path = os.path.join(MOVIES_PATH, str(id))
         if os.path.isdir(movie_path):    # delete dir.
             shutil.rmtree(movie_path)
         logging.info('Movie object `{}` has been deleted successfully.'.format(id))

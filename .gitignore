@@ -2,7 +2,7 @@
 /in/
 /out/
 /__pycache__/
-/Interface/movies
+/Interface/movies/
 /Interface/__pycache__/
 /Interface/samsa.db
 /Interface/samsa.log

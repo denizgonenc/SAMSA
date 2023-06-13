@@ -11,7 +11,8 @@ speechbrain
 transformers
 pyannote.audio
 whisper
-
+nltk
+gensim
 
 git+https://github.com/huggingface/datasets.git
 git+https://github.com/huggingface/transformers.git

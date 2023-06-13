@@ -10,5 +10,5 @@ class UnsupportedFileError(Exception):
 
     def __init__(self, extension: str):
         self.extension = extension
-        self.message = '"%s" is an unsupported extension. Supported extensions are ".mp4", ".mp3", ".wav", ".scrt"' % self.extension
+        self.message = '"%s" is an unsupported extension. Supported extensions are ".mp4", ".mp3", ".wav", ".json"' % self.extension
         super().__init__(self.message)
