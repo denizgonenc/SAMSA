@@ -1,11 +1,13 @@
 import json
 
-from os.path import splitext, join, abspath, basename
+from os.path import splitext, join, basename
 from os import remove, listdir
 
 from moviepy.editor import VideoFileClip, AudioFileClip
-from pydub import AudioSegment
 from fastapi import UploadFile
+
+from SentimentalAnalysis.src.endpoint import predict_script
+from SpeechRecognition.src.speaker_diarization import SpeakerDiarization
 
 
 def mp3_to_wav(uploaded_file: UploadFile, output_directory: str):
@@ -46,12 +48,16 @@ def mp4_to_wav(uploaded_file: UploadFile, output_directory: str): # NOTE looks l
 #####################
 
 def get_speakers(movie_path: str, name: str):
-    with open(join(movie_path, name), 'r', encoding='utf-8') as json_file:
-        data = json.load(json_file)
+    json_path = join(movie_path, name)
+    try:
+        with open(json_path, 'r', encoding='utf-8') as json_file:
+            data = json.load(json_file)
+            speakers = []
+            for d in data:
+                if d['speaker'] not in speakers:
+                    speakers.append(d['speaker'])
+    except FileNotFoundError:
         speakers = []
-        for d in data:
-            if d['speaker'] not in speakers:
-                speakers.append(d['speaker'])
     return speakers
 
 def change_speaker_name(movie_path: str, name: str, old_s_name: str, new_s_name: str) -> None:
@@ -72,6 +78,7 @@ def change_speaker_name(movie_path: str, name: str, old_s_name: str, new_s_name:
         dump = json.dumps(data, indent=4)
         json_file.write(dump)
     return 'ok'
+
 
 ####################
 # Files Functions  #
@@ -97,3 +104,33 @@ def save_JSON(json_file_path: str, data):
     with open(json_file_path, 'w') as json_file:
         dump = json.dumps(data, indent=4)
         json_file.write(dump)
+
+
+####################
+# Background Tasks #
+####################
+
+def run_speech_2_text(wav_file_path: str, output_file_path: str, speaker_diarization_model: SpeakerDiarization):
+    json_data = speaker_diarization_model.get_text(wav_file_path)
+    for d_idx, d in enumerate(json_data):
+        results = {
+            'sentiment': None,
+            'probability': None,
+            'valence': None
+        }
+        json_data[d_idx]['results'] = results
+
+    # db_movie_dir_path, file_name + ".json"
+    json_file_path = join(output_file_path)
+    save_JSON(json_file_path, json_data)
+
+    # Apply sentiment analysis
+    sentiment_results = predict_script(json_file_path)
+    for idx in range(len(json_data)):
+        json_data[idx]['results'] = {
+            "sentiment": sentiment_results.iloc[idx]['sentiment'],
+            "probability": sentiment_results.iloc[idx]['probability'],
+            "valence": sentiment_results.iloc[idx]['valence']
+        }
+    save_JSON(json_file_path, json_data)
+    print('INFO: Speech recognition thread for {} is finished.'.format(json_file_path))

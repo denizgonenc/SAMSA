@@ -7,12 +7,9 @@ import shutil
 import json
 import logging
 from SpeechRecognition.src.speaker_diarization import SpeakerDiarization
-#
 import nltk
 nltk.download('punkt')
-
 from SentimentalAnalysis.src.endpoint import predict_script
-#
 
 SUPPORTED_EXTENSIONS = [".mp3", ".mp4", ".wav", ".json"]
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -33,6 +30,7 @@ logging.basicConfig(
     ]
 )
 
+from threading import Thread
 from typing import Optional, List, Union
 from fastapi import FastAPI, Request, File, UploadFile, Response, Depends
 from fastapi.encoders import jsonable_encoder
@@ -61,6 +59,9 @@ database.Base.metadata.create_all(bind=database.engine)
 # next function is necessary to get Session object.
 next(database.get_db()).execute(text('CREATE VIRTUAL TABLE IF NOT EXISTS movies_fts USING fts5(movies)'))
 
+# The model that segments, diarize speech is loaded.
+speaker_diarization_model = SpeakerDiarization()
+
 ##################################
 #     HTML RESPONSES (VIEWS)     #
 ##################################
@@ -68,6 +69,7 @@ next(database.get_db()).execute(text('CREATE VIRTUAL TABLE IF NOT EXISTS movies_
 async def index_view(request: Request):
     # This route is used to route itself to the previously uploaded audio files, previously processed audio files to look its graphs.
     return templates.TemplateResponse("index.html", {"request": request, "message": "message"})
+
 
 @app.get("/database", response_class=HTMLResponse)
 async def database_view(request: Request, db: models.Session = Depends(database.get_db)):
@@ -84,9 +86,11 @@ async def database_view(request: Request, db: models.Session = Depends(database.
 
     return templates.TemplateResponse("database.html", {"request": request, "movies": temp_movies})
 
+
 @app.get("/authors", response_class=HTMLResponse)
 async def authors_view(request: Request):
     return templates.TemplateResponse("authors.html", {"request": request})
+
 
 @app.get("/movies/{movie_id}", response_class=HTMLResponse)
 async def movie_view(request: Request, movie_id: int, db: models.Session = Depends(database.get_db)):
@@ -116,10 +120,12 @@ async def movie_view(request: Request, movie_id: int, db: models.Session = Depen
 ##################################
 #         API OPERATIONS         #
 ##################################
+
 @app.get('/m', response_model=List[schemas.Movie])
 async def list_movies(offset: int = 0, limit: int = 100, db: models.Session = Depends(database.get_db)):
     ret_list = db.query(models.MovieDB).offset(offset).limit(limit).all()
     return JSONResponse(content=[jsonable_encoder(schemas.Movie.from_orm(item)) for item in ret_list])
+
 
 @app.get('/m/{id}')
 async def get_movie(id: int, db: models.Session = Depends(database.get_db)):
@@ -128,77 +134,66 @@ async def get_movie(id: int, db: models.Session = Depends(database.get_db)):
         return Response(content=json.dumps({"error": "There is no such entry with id=`{}`".format(id)}), status_code=404)
     return JSONResponse(content=jsonable_encoder(schemas.Movie.from_orm(movie)))
 
+
 @app.post('/')
 async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Session = Depends(database.get_db)):
     if uploaded_file == None:
         return JSONResponse(content=json.dumps({"error": "File cannot be empty. Please select a file."}), status_code=422)
+    
     file_name, file_extension = os.path.splitext(uploaded_file.filename)
     if file_extension not in SUPPORTED_EXTENSIONS:
         e = exceptions.UnsupportedFileError(file_extension)
         logging.error(e.message)
         return JSONResponse(content=json.dumps({"error": e.message}), status_code=422)
+    
     try:
         db_movie = crud.MovieCRUD.create_movie(db, uploaded_file.filename)
     except exceptions.DuplicateMovieError as e:
         logging.error(e.message)
         return JSONResponse(content=json.dumps({'error': e.message}), status_code=400)   
 
-    ########################################################
-    ### Create directory for uploaded file and store it. ###
-    ########################################################
+    # Creates the directory for uploaded file and stores it.
     db_movie_dir_path = os.path.join(MOVIES_PATH, str(db_movie.id))
-    if os.path.isdir(db_movie_dir_path):
-        shutil.rmtree(db_movie_dir_path)
+    if os.path.isdir(db_movie_dir_path): shutil.rmtree(db_movie_dir_path)
     os.mkdir(db_movie_dir_path)
 
-    #############################
-    ### Creates related files ###
-    #############################
-    if file_extension == ".mp3":    # .mp3 file should be converted into wav.
+    # Creates related files
+    if file_extension == ".mp3":
         wav_file_path = functions.mp3_to_wav(uploaded_file, db_movie_dir_path)
 
-    elif file_extension == ".mp4":    # .mp4 file should be converted into wav.
+    elif file_extension == ".mp4":
         wav_file_path = functions.mp4_to_wav(uploaded_file, db_movie_dir_path)
 
-    elif file_extension == ".wav":    # Also, .wav file can be stored directly.
+    elif file_extension == ".wav":
         wav_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
         with open(wav_file_path, "wb") as wav_file:
             wav_file.writelines(uploaded_file.file.readlines())
     
-    if file_extension != ".json":    # .json file can be stored directly
-        temp_speaker_diarizaton = SpeakerDiarization()
-        json_data = temp_speaker_diarizaton.get_text(wav_file_path)
-        for d_idx, d in enumerate(json_data):
-            results = {
-                'sentiment': None,
-                'probability': None,
-                'valence': None
-            }
-            json_data[d_idx]['results'] = results
-
-        json_file_path =  os.path.join(db_movie_dir_path, file_name + ".json")
-        functions.save_JSON(json_file_path, json_data)
-
+    if file_extension != ".json":
+        output_file_path = os.path.join(db_movie_dir_path, file_name + ".json")
+        thread_speech = Thread(target=functions.run_speech_2_text, args=(wav_file_path, output_file_path, speaker_diarization_model))
+        thread_speech.start()
+        
     else:
         json_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
         with open(json_file_path, 'wb') as json_file:
             json_file.writelines(uploaded_file.file.readlines())
+        json_data = json.loads(json_file_path)
 
-    ######################
-    # Sentiment Analysis #
-    ######################
-    sentiment_results = predict_script(json_file_path)
-    for idx in range(len(json_data)):
-        json_data[idx]['results'] = {
-            "sentiment": sentiment_results.iloc[idx]['sentiment'],
-            "probability": sentiment_results.iloc[idx]['probability'],
-            "valence": sentiment_results.iloc[idx]['valence']
-        }
+        # Apply sentiment analysis
+        sentiment_results = predict_script(json_file_path)
+        for idx in range(len(json_data)):
+            json_data[idx]['results'] = {
+                "sentiment": sentiment_results.iloc[idx]['sentiment'],
+                "probability": sentiment_results.iloc[idx]['probability'],
+                "valence": sentiment_results.iloc[idx]['valence']
+            }
 
-    functions.save_JSON(json_file_path, json_data) 
-    logging.info('The file: "' + json_file_path + '" is successfully uploaded')
+        functions.save_JSON(json_file_path, json_data)
 
+    logging.info('The file: "' + file_name + '" is successfully uploaded')
     return JSONResponse(content=jsonable_encoder(db_movie))
+
 
 # These two methods are not going to be rendered.
 @app.put("/m/{id}")
@@ -228,6 +223,7 @@ async def update_movie_info(id: int, movie: schemas.MovieUpdate, db: models.Sess
         db.refresh(db_movie)
         logging.info('Movie `{}` has been successfully updated.'.format(db_movie.id))
         return JSONResponse(content=jsonable_encoder(schemas.Movie.from_orm(db_movie)))
+
 
 @app.delete("/m/{id}", status_code=204)
 async def delete_movie(id: int, db:models.Session = Depends(database.get_db)):
@@ -264,14 +260,3 @@ def search(q: str, db: models.Session = Depends(database.get_db)):
 @app.get("/not-found")
 def not_found_page(request: Request, q: str = ""):
     return templates.TemplateResponse('not_found.html', {"request": request, "q": q}, status_code=404)
-
-# @app.get("/test")
-# def not_found_page(request: Request):
-#     print('./in/converted.wav')
-#     speech = SpeakerDiarization('./in/converted.wav')
-#     speech.get_text()
-#     return JSONResponse(content=json.dumps('success'), status_code=200)
-#     # TODO: remove
-
-# result = predict_script(os.path.join(MOVIES_PATH, '3', 'join.json'))
-# print(type(result))
