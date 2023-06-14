@@ -2,8 +2,12 @@ import pickle
 import nltk
 import string
 import numpy as np
+import os
 
-with open('../data/processed/normalized_sentiments.pkl', 'rb') as f:
+BASE_DIR = os.path.abspath('')
+SENTIMENT_SCORE_PATH = os.path.join(BASE_DIR, 'SentimentalAnalysis', 'data', 'processed', 'normalized_sentiments.pkl')
+
+with open(SENTIMENT_SCORE_PATH, 'rb') as f:
     sentiment_scores = pickle.load(f)
 
 sentiments = ["anger", "anticipation", "disgust", "fear", "joy", "sadness", "surprise", "trust"]

@@ -14,6 +14,8 @@ body {
 div.navbar {
     top: 0;
     background-color: #014012;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, #014012 10%, #00601a 50%, #014012 70%);
     display: flex;
     justify-content: space-between;
     padding: 0;
@@ -56,6 +58,7 @@ a.navbar-button {
     padding: 1rem 1rem;
     text-decoration: none;
     user-select: none;
+    font-weight: 200;
 }
 
 a.navbar-button:hover {
@@ -75,17 +78,45 @@ div.main-frame {
     margin: 2% 2% 2% 2%;
 }
 
+.index {
+    display: flex;
+    flex-direction: column;
+    text-align: justify;
+    justify-content: space-around;
+    background-color: rgb(218, 218, 218);
+    color: black;
+    border-radius: 5px;
+    margin: 2% 2% 2% 2%;
+    padding: 10px;
+    box-shadow: 2px 2px 5px black;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    float: left;
+    margin: 0 10px 0;
+    font-size: 18px;
+}
+
+.index-element {
+    flex-basis: auto;
+    padding-right: 20px;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
 div.box-input {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    margin: 3rem 3rem 3rem 3rem;
+    margin: 0 0 1rem 0;
 }
 
 
 div.box-input p {
     display: flex;
-    /* width: 200px; */
     text-align: left;
     font-weight: 700;
     font-size: 18px;
@@ -100,13 +131,13 @@ div.box-input-success {
 div.box-input-error {
     display: none;
     margin: 1rem;
+    text-align: center;
+    align-items: center;
     background-color: #FFD6D0;
     color: #E0120C;
     box-shadow: 2px 2px 6px rgba(#E0120C, 0.2);
     border-radius: 5%;
     padding: 1rem;
-    /* text-align: center; */
-    /* align-items: center; */
 }
 
 input.submit-button {
@@ -141,9 +172,8 @@ label.dnd {
     font-size: 18px;
     font-weight: lighter;
     font-style: normal;
-    /* margin: 1rem 1rem 1rem 1rem; */
     user-select: none;
-    padding: 5rem 6rem 5rem 6rem;
+    padding: 3rem 4rem 3rem 4rem;
     width: 16rem;
 }
 
@@ -192,8 +222,7 @@ footer {
 div.uploaded-file {
     display: inline-flex;
     flex-direction: column;
-    margin: inherit;
-    padding: inherit;
+    margin: 10px 20px 10px 20px;
 }
 
 button.cancel-button {
@@ -269,30 +298,32 @@ progress::-moz-progress-bar {
 input.search-input {
     display: flex;
     justify-content: center;
+    align-self: center;
     width: 500px;
     height: 40px;
-    margin-top: 1.2rem;
-    margin-bottom: 0.9rem;
+    margin: 5px 3px 5px 3px;
     padding: 0.35rem 1rem 0.35rem 1rem;
     border: 1px solid grey;
-    border-radius: 20px;
+    border-radius: 15px;
     font-weight: 700;
     font-family: inherit;
+    box-shadow: 1px 1px 1px #014012;
 }
 
 button.search-button {
     display: block;
     font-family: 'Montserrat';
-    background-color: #278143;
-    height: 2.5rem;
-    width: 5.5rem;
+    background-color: #a0a0a0;
+    width: 5rem;
     align-self: center;
-    margin: 5px;
+    margin: 5px 3px 5px 3px;
     padding: 2px;
-    border-radius: 2rem;
+    border-radius: 15px;
     font-weight: bolder;
     font-size: 13px;
     border: none;
+    height: 40px;
+    box-shadow: 1px 1px 1px #014012;
 }
 
 button.search-button:hover {
@@ -316,8 +347,6 @@ li.searchElement {} */
 /* Movie entries. */
 .movie-table {
     font-size: 20px;
-    background-color: rgb(218, 218, 218);
-    border-radius: 10px;
     padding: 20px;
     border-collapse: separate;
     border-spacing: 0;
@@ -400,4 +429,23 @@ input[type=text].movie-inp-chg {
 
 .green {
     background-color: rgb(29, 126, 29);
+}
+
+/* Movie page styles. */
+.movie-first-row {
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+    background-color: rgb(218, 218, 218);
+    color: black;
+    border-radius: 5px;
+    /* width: 80%; */
+    margin: 0 10% 0 10%;
+    padding: 10px;
+    box-shadow: 2px 2px 5px black;
+}
+
+.movie-name {
+    display: flex;
+    margin: 2% 10% 2% 10%;
 }

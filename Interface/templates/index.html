@@ -18,9 +18,6 @@
         <img class="navbar-logo" src="/static/logo_dark_v2.png" alt="logo"></img>
 
         <section class="search-bar">
-            <!-- <label class="search-" for="search">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </label> -->
             <input class="search-input" id="search-input1" name="search" type="search" autocomplete="false"
                 placeholder="Search movie analysis ...">
             <button class="search-button"> search </button>
@@ -40,69 +37,102 @@
         </ul>
     </div>
     <div class="main-frame">
-        <h1> About Project </h1>
+        <div class="index">
 
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed velit auctor sapien venenatis volutpat.
-            Aenean quis volutpat tortor. Aenean semper porta quam a sagittis. Maecenas sem lorem, blandit a ornare et,
-            molestie vitae lectus. Pellentesque vitae sapien vestibulum, dignissim ante in, congue libero. Pellentesque
-            feugiat ipsum sed tincidunt efficitur. Ut vel congue massa. Fusce dignissim felis augue, ullamcorper
-            volutpat nulla hendrerit accumsan. Ut sagittis, turpis vitae tincidunt interdum, nibh leo tincidunt est, eu
-            imperdiet elit enim consequat felis. Etiam fermentum consequat tincidunt. Praesent et massa dui. Phasellus
-            lacinia condimentum leo in dictum. Suspendisse quis dui non dui bibendum bibendum vel ultricies mauris.
-            Phasellus hendrerit dapibus lacinia. Donec fringilla, leo a molestie condimentum, lacus magna placerat
-            augue, hendrerit cursus ipsum ligula sit amet ligula.
-        </p>
-        <p>
-            Nulla facilisi. Nullam a velit quam. Fusce vitae vehicula dolor, efficitur porttitor diam. Pellentesque ut
-            condimentum leo. Nam elementum tellus nunc, eu eleifend leo porta eget. Nam lacinia odio arcu, sed maximus
-            felis finibus sed. Sed id porta magna. Duis viverra ligula ut finibus pulvinar. Morbi eu varius nulla, vitae
-            lacinia massa. Integer vestibulum efficitur nisi ut tristique. Aliquam sed elit purus. Duis efficitur
-            pulvinar massa eget blandit. Fusce nisl lorem, blandit non posuere quis, scelerisque ut justo. Quisque
-            vehicula velit a libero finibus, a vulputate diam pretium. Pellentesque luctus dolor sit amet erat dignissim
-            aliquam. Maecenas non velit aliquet, lacinia purus non, hendrerit odio.
-        </p>
-
-        <p>
-            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec bibendum
-            felis quis fringilla consequat. Nam nec euismod metus. Vestibulum vitae velit eget purus porta rutrum.
-            Vivamus pellentesque consequat imperdiet. Donec ornare purus vitae lobortis porta. Maecenas ornare orci ac
-            enim sodales, a vehicula nisl cursus. Cras consequat mi libero, a pharetra nulla dignissim vitae. Sed vitae
-            fermentum dui. Quisque vehicula cursus nunc in feugiat. Class aptent taciti sociosqu ad litora torquent per
-            conubia nostra, per inceptos himenaeos. Aliquam vehicula metus ligula, nec mollis arcu vestibulum venenatis.
-            Suspendisse nec orci at massa dignissim fringilla. Donec maximus ligula id quam dapibus iaculis. Duis in
-            auctor ligula.
-        </p>
-        <p>
-            Vestibulum vel pharetra metus. Vivamus molestie est magna, quis elementum dolor fringilla in. Nulla
-            facilisi. Nam at auctor magna. Vivamus sit amet orci a magna suscipit vulputate. Donec porttitor nibh sit
-            amet ornare condimentum. In vestibulum tristique ex, vel hendrerit justo condimentum sit amet.
-        </p>
-
-        <p>
-            Phasellus vitae posuere libero. Praesent sed vehicula tortor. Duis egestas ut tellus vitae bibendum.
-            Praesent finibus fermentum bibendum. Vestibulum aliquet velit eget varius efficitur. Suspendisse id
-            tincidunt erat. Morbi arcu metus, vestibulum id est sit amet, pharetra tincidunt quam. In erat tellus,
-            hendrerit sed diam at, eleifend iaculis felis.
-        </p>
-
-        <!-- action = upload-test is important may cause errors in the continuation -->
-        <form id="form1" action="/" enctype="multipart/form-data" method="post" autocomplete="off">
-            <!-- <h1> Try It </h1> -->
-            <h1> Wanna Try?</h1>
-            <div class="box-input">
-                <!-- name property is important to get file from fastapi framework. -->
-                <input class="audio-input" type="file" id="audio-input1" name="uploaded_file">
-                <label class="dnd" for="audio-input1">
-                    <strong>Choose a File</strong>
-                    <h1 style="font-weight: lighter; font-style: normal; font-size: 60px; margin: 0; padding: 0;">+</h1>
-                    or Drag & Drop here
-                </label>
-                <div class="box-input-success"> Success </div>
-                <div class="box-input-error"> Error: </div>
+            <div class="row">
+                <h1 class="index-element"> About Project </h1>
+                <h1 class="index-element"> How to Use? </h1>
             </div>
 
-        </form>
+            <div class="row">
+                <div class="index-element">
+                    <p class="index-element">
+                        Emotions are things that specify a person’s acts, feelings, Emotions play a significant role in
+                        our lives, influencing our thoughts, actions, and relationships. Understanding and examining
+                        emotions can provide valuable insights and foresight in various areas. Exploring emotions
+                        through research and analysis empowers us to make informed choices, cultivate empathy, and
+                        create a more harmonious and fulfilling existence. Since emotions are this much significant in
+                        society, in our project we are examining movie/tv series scripts with NLP to find out the
+                        emotions. We are doing our research specifically on movie/tv series scripts because one of the
+                        best reflections of real life and real human emotions that we can observe is from movies/tv
+                        series.
+                    </p>
+                    <p class="index-element">
+                        Natural Language Processing (NLP) and speech recognition are widely utilized artificial
+                        intelligence (AI) applications that have become increasingly prevalent in various domains. The
+                        objective of this project is to explore the field of Natural Language Processing (NLP) and
+                        Speech Recognition and implement them to work on emotions. Our aim was to create a Natural
+                        Language Processing model, and use that model on the script that we obtained by already in use
+                        Speech Recognition tools. Eventually, our aim was to obtain a model which we can use to predict
+                        the emotions in a movie/tv series script. As a result we used the obtained modules on scripts to
+                        visualize the emotions. For the visualization we are using python tools for pie charts, bar
+                        charts, etc. As our final product we designed an NLP model, used already generated Speech
+                        Recognition models with some changes and gathered them in our website.
+                    </p>
+                </div>
+                <div class="index-element">
+                    <div class="row">
+                        <div>
+                            <p class="index-element">
+                                Allowed extensions are <strong>.json</strong>, <strong>.wav</strong>,
+                                <strong>.mp3</strong> and <strong>.mp4</strong>. If the input file's extension is
+                                incorrect, it will return the related error message.
+                            </p>
+
+                            <ol class="index-element" style="">
+                                <li>
+                                    The input box at the bottom of the page is used to select the input files. Click it
+                                    and select the file that is going to be uploaded or Drag&Drop to the same place.
+                                </li>
+                                <li>
+                                    Press the <strong>Upload</strong> button that is on the right side of the upload
+                                    box. If you are not sure of the file, click the <strong>Cancel</strong> button and
+                                    reselect the file. The file will respond with a "finished" message if it is
+                                    successfully uploaded. Otherwise, it will return the related error.
+                                </li>
+                                <li>
+                                    If the upload operation is finished correctly, you can see the uploaded file,
+                                    processed information, resulting charts, and any other information on the database
+                                    and movie pages.
+                                </li>
+                            </ol>
+
+                            <p class="index-element">
+                                If the file is still in the SpeakerDiarization process you cannot be able to view the
+                                resulting JSON files, charts, speakers, etc.
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <h1> Wanna Try?</h1>
+            </div>
+
+            <div class="row">
+                <!-- action = upload-test is important may cause errors in the continuation -->
+                <form id="form1" action="/" enctype="multipart/form-data" method="post" autocomplete="off">
+                    <div class="box-input">
+                        <!-- name property is important to get file from fastapi framework. -->
+                        <input class="audio-input" type="file" id="audio-input1" name="uploaded_file">
+                        <label class="dnd" for="audio-input1">
+                            <strong>Choose a File</strong>
+                            <br>
+                            <br>
+                            <i class="fa fa-plus"></i>
+                            <br>
+                            <br>
+                            or Drag & Drop here
+                        </label>
+                        <div class="box-input-success"> Success </div>
+                        <div class="box-input-error"> Error: </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 
     </div>
 

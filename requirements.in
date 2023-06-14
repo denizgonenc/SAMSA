@@ -14,11 +14,12 @@ whisper
 nltk
 gensim
 
-git+https://github.com/huggingface/datasets.git
-git+https://github.com/huggingface/transformers.git
+pip install -q git+https://github.com/openai/whisper.git
+pip install -q git+https://github.com/pyannote/pyannote-audio
+torch
 torchaudio
+seaborn
 librosa
-
 
 fastapi
 uvicorn
