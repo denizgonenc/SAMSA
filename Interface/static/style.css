@@ -78,17 +78,45 @@ div.main-frame {
     margin: 2% 2% 2% 2%;
 }
 
+.index {
+    display: flex;
+    flex-direction: column;
+    text-align: justify;
+    justify-content: space-around;
+    background-color: rgb(218, 218, 218);
+    color: black;
+    border-radius: 5px;
+    margin: 2% 2% 2% 2%;
+    padding: 10px;
+    box-shadow: 2px 2px 5px black;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    float: left;
+    margin: 0 10px 0;
+    font-size: 18px;
+}
+
+.index-element {
+    flex-basis: auto;
+    padding-right: 20px;
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
 div.box-input {
     display: flex;
     flex-direction: row;
     justify-content: left;
-    margin: 3rem 3rem 3rem 3rem;
+    margin: 0 0 1rem 0;
 }
 
 
 div.box-input p {
     display: flex;
-    /* width: 200px; */
     text-align: left;
     font-weight: 700;
     font-size: 18px;
@@ -103,13 +131,13 @@ div.box-input-success {
 div.box-input-error {
     display: none;
     margin: 1rem;
+    text-align: center;
+    align-items: center;
     background-color: #FFD6D0;
     color: #E0120C;
     box-shadow: 2px 2px 6px rgba(#E0120C, 0.2);
     border-radius: 5%;
     padding: 1rem;
-    /* text-align: center; */
-    /* align-items: center; */
 }
 
 input.submit-button {
@@ -144,9 +172,8 @@ label.dnd {
     font-size: 18px;
     font-weight: lighter;
     font-style: normal;
-    /* margin: 1rem 1rem 1rem 1rem; */
     user-select: none;
-    padding: 5rem 6rem 5rem 6rem;
+    padding: 3rem 4rem 3rem 4rem;
     width: 16rem;
 }
 
@@ -195,8 +222,7 @@ footer {
 div.uploaded-file {
     display: inline-flex;
     flex-direction: column;
-    margin: inherit;
-    padding: inherit;
+    margin: 10px 20px 10px 20px;
 }
 
 button.cancel-button {
@@ -292,7 +318,7 @@ button.search-button {
     align-self: center;
     margin: 5px 3px 5px 3px;
     padding: 2px;
-    border-radius: 10px;
+    border-radius: 15px;
     font-weight: bolder;
     font-size: 13px;
     border: none;
@@ -321,14 +347,11 @@ li.searchElement {} */
 /* Movie entries. */
 .movie-table {
     font-size: 20px;
-    background-color: rgb(218, 218, 218);
-    border-radius: 5px;
     padding: 20px;
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
     text-align: center;
-    box-shadow: 2px 2px 5px black;
 }
 
 .movie-table td {
