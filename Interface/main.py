@@ -103,8 +103,8 @@ async def movie_view(request: Request, movie_id: int, db: models.Session = Depen
     movie_path = os.path.join(MOVIES_PATH, str(movie_id))
     speakers = functions.get_speakers(movie_path, name + '.json')
     files = functions.get_files(movie_path)
+    graphs = functions.get_graphs(movie_path)
 
-    # TODO: show graphs.
     m = {
         'movie_id': movie_id,
         'name': name,
@@ -112,7 +112,7 @@ async def movie_view(request: Request, movie_id: int, db: models.Session = Depen
         'description': description,
         'speakers': speakers,
         'files': files,
-        'graphs': 1
+        'graphs': graphs
     }
     return templates.TemplateResponse("movie.html", {"request": request, "m": m})
 
@@ -172,7 +172,9 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
     if file_extension != ".json":
         output_file_path = os.path.join(db_movie_dir_path, file_name + ".json")
         thread_speech = Thread(target=functions.run_speech_2_text, args=(wav_file_path, output_file_path, speaker_diarization_model))
+        thread_charts = Thread(target=functions.create_graphs, args=(db_movie_dir_path, output_file_path, thread_speech))
         thread_speech.start()
+        thread_charts.start()
         
     else:
         json_file_path = os.path.join(db_movie_dir_path, uploaded_file.filename)
@@ -190,6 +192,7 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
             }
 
         functions.save_JSON(json_file_path, json_data)
+        functions.create_graphs(db_movie_dir_path, output_file_path, thread_speech)
 
     logging.info('The file: "' + file_name + '" is successfully uploaded')
     return JSONResponse(content=jsonable_encoder(db_movie))
