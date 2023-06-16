@@ -38,7 +38,7 @@ logging.basicConfig(
 
 from threading import Thread
 from typing import Optional, List, Union
-from fastapi import FastAPI, Request, File, UploadFile, Response, Depends
+from fastapi import FastAPI, Request, File, UploadFile, Response, Depends, Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -95,24 +95,19 @@ async def database_view(request: Request, db: models.Session = Depends(database.
 
 @app.get("/authors", response_class=HTMLResponse)
 async def authors_view(request: Request):
-    if request.method == "POST":
-        form_data = await request.form()
-        name = form_data.get("name")
-        email = form_data.get("email")
-        message = form_data.get("message")
+    return templates.TemplateResponse("authors.html", {"request": request})
 
-        msg = MIMEMultipart()
-        msg['From'] = email
-        msg['To'] = ADMIN_EMAIL
-        msg['Subject'] = f"New message from {name}"
-        msg.attach(MIMEText(message, 'plain'))
-
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.send_message(msg)
-
-        return "Message sent successfully!"
-
+@app.post("/authors", response_class=HTMLResponse)
+async def create_messages(request: Request, message: str=Form(), email: str=Form(), name: str=Form()):
+    data = []
+    try:
+        with open("Interface/messages.json", 'r', encoding="utf-8") as json_file:
+            data = json.load(json_file)
+    except FileNotFoundError:
+        open("Interface/messages.json", "a", encoding="utf-8").close()
+    with open("Interface/messages.json", 'w', encoding="utf-8") as json_file:
+        data.append({"name": name, "email": email, "message": message })
+        json.dump(data, json_file, indent=4)
     return templates.TemplateResponse("authors.html", {"request": request})
 
 

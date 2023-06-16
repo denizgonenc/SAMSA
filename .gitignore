@@ -18,3 +18,4 @@ model_cache.pkl
 /.idea
 ffmpeg.exe
 /SentimentalAnalysis/tests/__pycache__
+/Interface/messages.json
