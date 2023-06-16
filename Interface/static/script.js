@@ -118,8 +118,8 @@ uploadButton.addEventListener('click', (event) => {
                     } else {    // Warning, error or internal server errors.
                         event.preventDefault();
                         errorMessage = JSON.parse(JSON.parse(xhr.response));
-                        errorBox.innerHTML = "<i class=\"fa fa - close\" style=\"font - size: 48px; color:red\"></i>" +
-                            "<strong>ERROR:</strong>" + errorMessage.error
+                        errorBox.innerHTML = "<i class=\"fa fa-close\" style=\"font-size: 32px; color:red\"></i>" +
+                            "<strong style=\"margin: 0 8px 0 8px;\">ERROR: </strong> " + errorMessage.error
                         errorBox.style.display = 'flex';
                     }
                 } catch (e) {
@@ -133,9 +133,9 @@ uploadButton.addEventListener('click', (event) => {
                 let percentComplete = (event.loaded / event.total) * 100;
                 progressBar.value = percentComplete;
                 if (percentComplete != 100) {
-                    fileName.innerHTML = file.name + '<span style="font-weight: 400; font-size: 16px;">: - Loading ... ' + Math.floor(percentComplete) + '% </span>';
+                    fileName.innerHTML = file.name + '<span style="font-weight: 400;">: - Loading ... ' + Math.floor(percentComplete) + '% </span>';
                 } else {
-                    fileName.innerHTML = file.name + '<span style="font-weight: 400; font-size: 16px;">: - Finished. </span>';
+                    fileName.innerHTML = file.name + '<span style="font-weight: 400;">: - Finished. </span>';
                 }
             }
         }

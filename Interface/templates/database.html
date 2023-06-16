@@ -21,7 +21,7 @@
         <section class="search-bar">
             <input class="search-input" id="search-input1" name="search" type="search" autocomplete="false"
                 placeholder="Search movie analysis ...">
-            <button class="search-button"> Search </button>
+            <button class="search-button"> search </button>
         </section>
 
 
@@ -41,58 +41,72 @@
 
     <div class="main-frame">
 
-        <h1> Database </h1>
+        <div class="index">
+            <div class="row">
+                <h1> Database </h1>
+            </div>
 
-        <table class="movie-table">
+            <table class="movie-table">
 
-            <thead>
-                <!-- id, name, <only this one changable>description, speakers, files, save, delete -->
-                <tr>
-                    <th> Id </th>
-                    <th> Name </th>
-                    <th> Description </th>
-                    <th> Speakers </th>
-                    <th> Files </th>
-                    <th> </th> <!--Save-->
-                    <th> </th> <!--Delete-->
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th> Id </th>
+                        <th> Name </th>
+                        <th> Description </th>
+                        <th> Speakers </th>
+                        <th> Files </th>
+                        <th> </th> <!--Save-->
+                        <th> </th> <!--Delete-->
+                    </tr>
+                </thead>
 
-            <tbody>
+                <tbody>
 
-                {% for movie in movies %}
+                    {% for movie in movies %}
 
-                <tr class="movie-row">
-                    <td>{{ movie['movie'].id }}</td>
-                    <td><a class="movie-link" href="/movies/{{movie['movie'].id}}"> {{
-                            ''.join(movie['movie'].name.split('.')[0:-1]) }}
-                        </a></td>
-                    <td><input class="movie-inp-chg" value="{{ movie['movie'].description }}" type=text></td>
-                    <td>
-                        <ul>
-                            {% for speaker in movie['speakers'] %}
-                            <li><input class="movie-inp-chg" type="text" value="{{ speaker }}" name="{{ speaker }}">
+                    <tr class="movie-row">
+                        <td>{{ movie['movie'].id }}</td>
+                        <td><a class="movie-link" href="/movies/{{movie['movie'].id}}"> {{
+                                ''.join(movie['movie'].name.split('.')[0:-1]) }}
+                            </a></td>
+                        <td><input class="movie-inp-chg" value="{{ movie['movie'].description }}" type=text></td>
+                        <td>
+                            {% if movie['speakers'].__len__() == 0 %}
+                            <ul>
+                                <li>
+                                    <div
+                                        style="padding: 0.8rem; color: #8A6D84; background-color: #FCF8E3; border-radius: 10px; box-shadow: 1px 1px 1px #FAEBCC; border: 1px solid #FAEBCC;">
+                                        <strong>NOTE:</strong> Please wait till the process is finished.
+                                    </div>
+                            </ul>
                             </li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                    <td>
-                        <ul>
-                            {% for file in movie['files'] %}
-                            <li> <a class="file-link" href="{{ file['url'] }}"> {{ file['name'] }} </a> </li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                    <td><button class="movie-btn green" id="save-{{movie.id}}"> <i class="fa fa-save"
-                                aria-hidden="true"></i> </button></td>
-                    <td><button class="movie-btn red" id="delete-{{movie.id}}"> <i class="fa fa-trash"
-                                aria-hidden="true"></i> </button></td>
-                </tr>
+                            {% else %}
+                            <ul>
+                                {% for speaker in movie['speakers'] %}
+                                <li><input class="movie-inp-chg" type="text" value="{{ speaker }}" name="{{ speaker }}">
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <ul>
+                                {% for file in movie['files'] %}
+                                <li> <a class="file-link" href="{{ file['url'] }}"> {{ file['name'] }} </a> </li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td><button class="movie-btn green" id="save-{{movie.id}}"> <i class="fa fa-save"
+                                    aria-hidden="true"></i> </button></td>
+                        <td><button class="movie-btn red" id="delete-{{movie.id}}"> <i class="fa fa-trash"
+                                    aria-hidden="true"></i> </button></td>
+                    </tr>
 
-                {% endfor %}
+                    {% endfor %}
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
     </div>
 

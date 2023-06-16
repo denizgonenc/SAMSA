@@ -23,11 +23,11 @@ class SpeakerDiarization:
 
     def load_model(self):
         try:
-            print("Found the file")
+            print("INFO: The Speaker Diarization model file is found.")
             with open(SpeakerDiarization.MODEL_CACHE_FILE, 'rb') as f:
                 return pickle.load(f)
         except FileNotFoundError:
-            print("Loading the file")
+            print("INFO: Loading the Speaker Diarization model file.")
             model = whisper.load_model('medium')
             self.freeze_model(model)
             with open(SpeakerDiarization.MODEL_CACHE_FILE, 'wb') as f:

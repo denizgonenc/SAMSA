@@ -38,19 +38,70 @@
     </div>
 
     <div class="main-frame">
-        <div class="movie">
-            <h1 class="movie-name">{{m.name}} - {{m.movie_id}}</h1>
-            <p class="movie-description">{{m.description}}</p>
-            <div class="movie-graphs"></div>
+
+        <img class="popup-image" src="">
+
+        <div class="index">
+
+            <div class="row bottom-line">
+                <div class="index-element">
+                    <h1> Name <span class="indicator">{{ m.name }}</span></h1>
+                </div>
+                <div class="index-element">
+                    <h1> ID <span class="indicator">{{ m.movie_id }}</span></h1>
+                </div>
+                <div class="index-element">
+
+                </div>
+            </div>
+
+            <div class="row bottom-line">
+
+                <div class="index-element">
+                    <h1>Description</h1>
+                    <p>{{ m.description }}</p>
+                </div>
+                <div class="index-element">
+                    <h1>Speakers</h1>
+                    <ul>
+                        {% for speaker in m.speakers %}
+                        <li>{{ speaker }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="index-element">
+                    <h1>Files</h1>
+                    <ul>
+                        {% for file in m.files %}
+                        <li> <a class="file-link" href="{{ file['url'] }}"> {{ file['name'] }} </a> </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <h1>Charts & Graphs</h1>
+            </div>
+            <div class="grid">
+                {% for graph in m.graphs %}
+                <img class="graph" src="{{ graph.path }}">
+                {% endfor %}
+            </div>
+
         </div>
+
+        <div class="movie-graphs"></div>
+
+    </div>
     </div>
 
     <footer>
         ©2023 - Hepsi 1 Team
     </footer>
 
-    <!-- <script src="static/movie.js"></script> -->
     <script src="/static/search.js"></script>
+    <script src="/static/graphs.js"></script>
+    <script src="/static/database.js"></script>
 
 </body>
 
