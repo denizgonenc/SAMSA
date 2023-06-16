@@ -40,10 +40,10 @@
     <div class="main-frame">
     </div>
 
-    <form method="POST" action="/authors">
-        <input type="text" name="name" placeholder="Your name"><br>
-        <input type="email" name="email" placeholder="Your email"><br>
-        <textarea name="message" placeholder="Your message"></textarea><br>
+    <form method="POST" action="/authors" enctype="application/json">
+        <input type="text" name="name" id="name" placeholder="Your name"><br>
+        <input type="text" name="email" id="email" placeholder="Your email"><br>
+        <input type="text" name="message" id="message" placeholder="Your message"></input><br>
         <input type="submit" value="Send">
     </form>      
 
