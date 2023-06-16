@@ -10,12 +10,18 @@ from SpeechRecognition.src.speaker_diarization import SpeakerDiarization
 import nltk
 nltk.download('punkt')
 from SentimentalAnalysis.src.endpoint import predict_script
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 SUPPORTED_EXTENSIONS = [".mp3", ".mp4", ".wav", ".json"]
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 STATIC_PATH = os.path.join(ROOT_PATH, "static")
 TEMPLATES_PATH = os.path.join(ROOT_PATH, "templates")
 MOVIES_PATH = os.path.join(ROOT_PATH, "movies")
+SMTP_SERVER = 'smtp.gmail.com'
+SMTP_PORT = 587
+ADMIN_EMAIL = 'info.samsa.contact@gmail.com'
 
 if not os.path.isdir(MOVIES_PATH):
     os.mkdir(MOVIES_PATH)
@@ -89,6 +95,24 @@ async def database_view(request: Request, db: models.Session = Depends(database.
 
 @app.get("/authors", response_class=HTMLResponse)
 async def authors_view(request: Request):
+    if request.method == "POST":
+        form_data = await request.form()
+        name = form_data.get("name")
+        email = form_data.get("email")
+        message = form_data.get("message")
+
+        msg = MIMEMultipart()
+        msg['From'] = email
+        msg['To'] = ADMIN_EMAIL
+        msg['Subject'] = f"New message from {name}"
+        msg.attach(MIMEText(message, 'plain'))
+
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.send_message(msg)
+
+        return "Message sent successfully!"
+
     return templates.TemplateResponse("authors.html", {"request": request})
 
 

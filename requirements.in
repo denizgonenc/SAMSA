@@ -14,8 +14,8 @@ whisper
 nltk
 gensim
 
-pip install -q git+https://github.com/openai/whisper.git
-pip install -q git+https://github.com/pyannote/pyannote-audio
+git+https://github.com/openai/whisper.git
+git+https://github.com/pyannote/pyannote-audio
 torch
 torchaudio
 seaborn
