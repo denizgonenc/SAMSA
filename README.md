@@ -42,21 +42,13 @@ This software project is licensed under the [MIT License](https://opensource.org
 
 This software project was made possible thanks to the following resources:
 
+- [NRC Lexicon] (2010). [Lexicon]. Retrieved from http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm
 
-- [Citation 2](link-to-citation-2): Brief description of the resource and how it contributed to the project.
 - [Citation 3](link-to-citation-3): Brief description of the resource and how it contributed to the project.
 
 ## References
 
 [1] Mohammad, S. M., & Turney, P. D. (2013). Crowdsourcing a Word-Emotion Association Lexicon. *Computational Intelligence*, 29(3), 436-465.
->@article{Mohammad13,
-  author = {Mohammad, Saif M. and Turney, Peter D.},
-  title = {Crowdsourcing a Word-Emotion Association Lexicon},
-  journal = {Computational Intelligence},
-  volume = {29},
-  number = {3},
-  pages = {436--465},
-  year = {2013}
-}
+[2] Mohammad, Saif, and Peter Turney. "Emotions Evoked by Common Words and Phrases: Using Mechanical Turk to Create an Emotion Lexicon." In *Proceedings of the NAACL HLT 2010 Workshop on Computational Approaches to Analysis and Generation of Emotion in Text*, June 2010, Los Angeles, CA. Association for Computational Linguistics, pp. 26-34. Available online: [link](https://aclanthology.org/W10-0204).
 
 
