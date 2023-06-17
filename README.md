@@ -42,7 +42,8 @@ This software project is licensed under the [MIT License](https://opensource.org
 
 This software project was made possible thanks to the following resources:
 
-- NRC Lexicon(https://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm)[1][2]: For providing us with a word-sentiment lexicon for us to calculate sentiment scores.
+- [NRC Lexicon](https://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm) [1][2]:
+  Provided us with a word-sentiment lexicon to calculate sentiment scores.
 
 ## References
 
