@@ -1,12 +1,10 @@
 # SAMSA - BBM479-BBM480 Project
 
-This iss a sentiment analysis project conducted in the field of Natural Language Processing (NLP) and speech recognition. The objective of this project was to predict the sentiment of lines spoken by characters in movies and visualize the results. The lines were obtained through speech-to-text conversion of sound files. To calculate sentiment scores, we employed the NRC emotion lexicon.
-
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ## Description
 
-This is a software project that aims to [provide a brief overview of the project and its purpose]. It was developed as part of [mention the context or organization involved in the project]. The project [briefly describe the main features or functionalities]. 
+This is a sentiment analysis project conducted in the field of Natural Language Processing (NLP) and speech recognition. The objective of this project was to predict the sentiment of lines spoken by characters in movies and visualize the results. The lines were obtained through speech-to-text conversion of sound files. To calculate sentiment scores, we employed the NRC emotion lexicon.
 
 ## Table of Contents
 
