@@ -38,20 +38,100 @@
     </div>
 
     <div class="main-frame">
-    </div>
 
-    <form method="POST" action="/authors" enctype="application/json">
-        <input type="text" name="name" id="name" placeholder="Your name"><br>
-        <input type="text" name="email" id="email" placeholder="Your email"><br>
-        <input type="text" name="message" id="message" placeholder="Your message"></input><br>
-        <input type="submit" value="Send">
-    </form>      
+        <div class="index">
+            <div class="row">
+                <div class="index-element">
+                    <h1> General </h1>
+                </div>
+                <div class="index-element">
+                    <h1> References & Citations </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="index-element">
+                    <!-- DON'T forget to change the link. -->
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0"
+                        allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-    <footer>
-        ©2023 - Hepsi 1 Team
-    </footer>
+                    <h3>Github Links</h3>
+                    <a class="movie-link" href="https://github.com/atayalin/SAMSA">
+                        <i class="fa fa-link"></i> SAMSA Github
+                    </a>
+                    <h3>Project Team Github Links</h3>
+                    <ul>
+                        <li>
+                            <a class="movie-link" href="https://github.com/denizgonenc">
+                                <i class="fa fa-link"></i> Deniz Gönenç Github
+                            </a>
+                        </li>
+                        <li>
+                            <a class="movie-link" href="https://github.com/muratileri">
+                                <i class="fa fa-link"></i> Murat İleri Github
+                            </a>
+                        </li>
+                        <li>
+                            <a class="movie-link" href="https://github.com/denizerkin">
+                                <i class="fa fa-link"></i> Deniz Erkin Kasaplı Github
+                            </a>
+                        </li>
+                        <li>
+                            <a class="movie-link" href="https://github.com/atayalin">
+                                <i class="fa fa-link"></i> Ata Yalın Başaran Github
+                            </a>
+                        </li>
+                    </ul>
 
-    <script src="/static/search.js"></script>
+                    <!-- Github account links of everybody. -->
+                    <!-- Report Link -->
+                    <!-- -->
+                </div>
+
+                <div class="index-element">
+                    <ul>
+                        <li>
+
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class="index-element">
+                    <h1>Contact</h1>
+                </div>
+                <div class="index-element"></div>
+            </div>
+
+            <div class="row">
+                <div class="index-element">
+                    <form class="contact-form" method="POST" action="/authors">
+                        <div class="row">
+                            <input type="text" name="name" placeholder="Your name">
+                            <input type="email" name="email" placeholder="Your email">
+                        </div>
+                        <div class="row">
+                            <textarea name="message" placeholder="Your message"></textarea>
+                        </div>
+                        <div class="row">
+                            <input type="submit" value="Send">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="index-element"></div>
+            </div>
+
+        </div>
+
+
+        <footer>
+            ©2023 - Hepsi 1 Team
+        </footer>
+
+        <script src="/static/search.js"></script>
 
 </body>
 
