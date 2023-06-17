@@ -190,8 +190,10 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
     
     if file_extension != ".json":
         output_file_path = os.path.join(db_movie_dir_path, file_name + ".json")
-        thread_speech = Thread(target=functions.run_speech_2_text, args=(wav_file_path, output_file_path, speaker_diarization_model))
-        thread_charts = Thread(target=functions.create_graphs, args=(db_movie_dir_path, output_file_path, thread_speech))
+        thread_speech = Thread(target=functions.run_speech_2_text,
+                               args=(wav_file_path, output_file_path, speaker_diarization_model, logging.info))
+        thread_charts = Thread(target=functions.create_graphs,
+                               args=(db_movie_dir_path, output_file_path, logging.info, thread_speech))
         thread_speech.start()
         thread_charts.start()
         

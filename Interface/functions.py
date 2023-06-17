@@ -30,7 +30,7 @@ def mp3_to_wav(uploaded_file: UploadFile, output_directory: str):
     return output_file_path    # Returning output file path.
 
 
-def mp4_to_wav(uploaded_file: UploadFile, output_directory: str): # NOTE looks like not necessary maybe we can remove this functionality.
+def mp4_to_wav(uploaded_file: UploadFile, output_directory: str):
     """
     The method that changes mp4 file into wav file.
     `input_file_path` is show the uploaded files path.
@@ -116,7 +116,7 @@ def save_JSON(json_file_path: str, data):
 # Background Tasks #
 ####################
 
-def run_speech_2_text(wav_file_path: str, json_file_path: str, speaker_diarization_model: SpeakerDiarization):
+def run_speech_2_text(wav_file_path: str, json_file_path: str, speaker_diarization_model: SpeakerDiarization, log: callable):
     json_data = speaker_diarization_model.get_text(wav_file_path)
     for d_idx, d in enumerate(json_data):
         results = {
@@ -138,7 +138,7 @@ def run_speech_2_text(wav_file_path: str, json_file_path: str, speaker_diarizati
 
     save_JSON(json_file_path, json_data)
     print(f'INFO: Speech recognition thread for {json_file_path} is finished.')
-
+    log(f'Speech recognition thread for {basename(json_file_path)} is finished.')
 
 ###################
 # Graph Functions #
@@ -152,7 +152,7 @@ GRAPH_NAME_DICT = {
 }
 
 
-def create_graphs(movie_path: str, json_file_path: str, previous: Thread = None):
+def create_graphs(movie_path: str, json_file_path: str, log: callable, previous: Thread = None):
     if previous != None: previous.join()
 
     # To get sentiment model's results.
@@ -174,6 +174,7 @@ def create_graphs(movie_path: str, json_file_path: str, previous: Thread = None)
         current_fig.savefig(graph_path, dpi='figure')
         plt_mod.clf()
     print(f'INFO: Sentimental analysis thread for {json_file_path} is finished.')
+    log(f'Sentimental analysis thread for {basename(json_file_path)} is finished.')
 
 
 def get_graphs(movie_path: str) -> list:
