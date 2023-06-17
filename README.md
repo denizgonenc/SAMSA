@@ -21,11 +21,11 @@ This is a software project that aims to [provide a brief overview of the project
 
 To install and run this software project locally, please follow these steps:
 
-1. Clone the repository:
-`git clone [[repository-url]](https://github.com/atayalin/SAMSA)`
-2. Create virtual environment: 
+1. Clone the repository:  
+`git clone [repository-url](https://github.com/atayalin/SAMSA)`
+2. Create virtual environment:  
 `python -m venv env `
-4. Install requirements:
+4. Install requirements:  
 `pip install -r requirements.in`
 5. Download and save executable ffmpeg file in /Interface
 
@@ -57,7 +57,7 @@ This software project was made possible thanks to the following resources:
 - [3] Mohammad, S. M., Bravo-Marquez, F., Salameh, M., & Kiritchenko, S. (2018). SemEval-2018 Task 1: Affect in Tweets. In Proceedings of International Workshop on Semantic Evaluation (SemEval-2018), New Orleans, LA, USA.
 - [Star Wars Movie Scripts](https://www.kaggle.com/datasets/xvivancos/star-wars-movie-scripts)
 - [Sentiment Analysis: Rick and Morty Scripts](https://www.kaggle.com/code/andradaolteanu/sentiment-analysis-rick-and-morty-scripts#10.-Bigram-Network)
-- [Generate Domain Specific Sentiment Lexicon] (https://www.mathworks.com/help/textanalytics/ug/generate-domain-specific-sentiment-lexicon.html)
+- [Generate Domain Specific Sentiment Lexicon](https://www.mathworks.com/help/textanalytics/ug/generate-domain-specific-sentiment-lexicon.html)
 
 
 
