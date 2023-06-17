@@ -22,7 +22,7 @@ This is a software project that aims to [provide a brief overview of the project
 To install and run this software project locally, please follow these steps:
 
 1. Clone the repository:  
-`git clone [repository-url](https://github.com/atayalin/SAMSA)`
+`git clone https://github.com/atayalin/SAMSA`
 2. Create virtual environment:  
 `python -m venv env `
 4. Install requirements:  
