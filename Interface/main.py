@@ -281,6 +281,7 @@ async def delete_movie(id: int, db:models.Session = Depends(database.get_db)):
 # Full text search to find movies.
 @app.post("/search", response_model = List[schemas.Movie])
 def search(q: str, db: models.Session = Depends(database.get_db)):
+    q = q.strip()
     results = db.query(models.MovieDB).filter(or_(
         models.MovieDB.description.like('%' + q + '%'),
         models.MovieDB.name.like('%' + q + '%'),
