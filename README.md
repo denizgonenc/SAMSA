@@ -42,7 +42,15 @@ This software project is licensed under the [MIT License](https://opensource.org
 
 This software project was made possible thanks to the following resources:
 
-- [Citation 1](link-to-citation-1): Brief description of the resource and how it contributed to the project.
+@article{Mohammad13,
+    Author = {Mohammad, Saif M. and Turney, Peter D.},
+    Journal = {Computational Intelligence},
+    Number = {3},
+    Pages = {436--465},
+    Title = {Crowdsourcing a Word-Emotion Association Lexicon},
+    Volume = {29},
+    Year = {2013}
+}
 - [Citation 2](link-to-citation-2): Brief description of the resource and how it contributed to the project.
 - [Citation 3](link-to-citation-3): Brief description of the resource and how it contributed to the project.
 
