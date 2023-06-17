@@ -42,20 +42,21 @@ This software project is licensed under the [MIT License](https://opensource.org
 
 This software project was made possible thanks to the following resources:
 
-@article{Mohammad13,
-    Author = {Mohammad, Saif M. and Turney, Peter D.},
-    Journal = {Computational Intelligence},
-    Number = {3},
-    Pages = {436--465},
-    Title = {Crowdsourcing a Word-Emotion Association Lexicon},
-    Volume = {29},
-    Year = {2013}
-}
+
 - [Citation 2](link-to-citation-2): Brief description of the resource and how it contributed to the project.
 - [Citation 3](link-to-citation-3): Brief description of the resource and how it contributed to the project.
 
 ## References
 
-[1] Author 1, Author 2, and Author 3. "Title of the Paper." *Conference/Journal Name*, Year.
-[2] Author 4 and Author 5. "Title of the Book." *Publisher*, Year.
-[3] Website Name. "Title of the Webpage." Available online: [link](URL), Accessed: Month Day, Year.
+[1] Mohammad, S. M., & Turney, P. D. (2013). Crowdsourcing a Word-Emotion Association Lexicon. *Computational Intelligence*, 29(3), 436-465.
+>@article{Mohammad13,
+  author = {Mohammad, Saif M. and Turney, Peter D.},
+  title = {Crowdsourcing a Word-Emotion Association Lexicon},
+  journal = {Computational Intelligence},
+  volume = {29},
+  number = {3},
+  pages = {436--465},
+  year = {2013}
+}
+
+
