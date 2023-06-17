@@ -116,7 +116,10 @@ def save_JSON(json_file_path: str, data):
 # Background Tasks #
 ####################
 
-def run_speech_2_text(wav_file_path: str, json_file_path: str, speaker_diarization_model: SpeakerDiarization, log: callable):
+def run_speech_2_text(wav_file_path: str, json_file_path: str, speaker_diarization_model: SpeakerDiarization, log: callable, previous: Thread):
+    if previous != None: previous.join()
+    log(f'Speech recognition thread for {basename(json_file_path)} is started.')
+
     json_data = speaker_diarization_model.get_text(wav_file_path)
     for d_idx, d in enumerate(json_data):
         results = {
@@ -137,7 +140,6 @@ def run_speech_2_text(wav_file_path: str, json_file_path: str, speaker_diarizati
         }
 
     save_JSON(json_file_path, json_data)
-    print(f'INFO: Speech recognition thread for {json_file_path} is finished.')
     log(f'Speech recognition thread for {basename(json_file_path)} is finished.')
 
 ###################
@@ -154,6 +156,7 @@ GRAPH_NAME_DICT = {
 
 def create_graphs(movie_path: str, json_file_path: str, log: callable, previous: Thread = None):
     if previous != None: previous.join()
+    log(f'Sentimental analysis thread for {basename(json_file_path)} is started.')
 
     # To get sentiment model's results.
     sentiment_results = predict_script(join(movie_path, json_file_path))
@@ -173,7 +176,6 @@ def create_graphs(movie_path: str, json_file_path: str, log: callable, previous:
         current_fig.set_size_inches((10.66, 6))
         current_fig.savefig(graph_path, dpi='figure')
         plt_mod.clf()
-    print(f'INFO: Sentimental analysis thread for {json_file_path} is finished.')
     log(f'Sentimental analysis thread for {basename(json_file_path)} is finished.')
 
 
