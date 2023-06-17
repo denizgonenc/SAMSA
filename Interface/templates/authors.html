@@ -38,20 +38,129 @@
     </div>
 
     <div class="main-frame">
-    </div>
 
-    <form method="POST" action="/authors" enctype="application/json">
-        <input type="text" name="name" id="name" placeholder="Your name"><br>
-        <input type="text" name="email" id="email" placeholder="Your email"><br>
-        <input type="text" name="message" id="message" placeholder="Your message"></input><br>
-        <input type="submit" value="Send">
-    </form>      
+        <div class="index">
+            <div class="row">
+                <div class="index-element">
+                    <h1> General </h1>
+                </div>
+                <div class="index-element">
+                    <h1> References </h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="index-element">
+                    <!-- DON'T forget to change the link. -->
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/VIDEO_ID" frameborder="0"
+                        allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-    <footer>
-        ©2023 - Hepsi 1 Team
-    </footer>
+                    <h3>Github Links</h3>
+                    <a class="movie-link" href="https://github.com/atayalin/SAMSA">
+                        <i class="fa fa-link"></i> SAMSA Github
+                    </a>
+                    <h3>Project Team Github Links</h3>
+                    <ul>
+                        <li>
+                            <a class="movie-link" href="https://github.com/denizgonenc">
+                                <i class="fa fa-link"></i> Deniz Gönenç Github
+                            </a>
+                        </li>
+                        <li>
+                            <a class="movie-link" href="https://github.com/muratileri">
+                                <i class="fa fa-link"></i> Murat İleri Github
+                            </a>
+                        </li>
+                        <li>
+                            <a class="movie-link" href="https://github.com/denizerkin">
+                                <i class="fa fa-link"></i> Deniz Erkin Kasaplı Github
+                            </a>
+                        </li>
+                        <li>
+                            <a class="movie-link" href="https://github.com/atayalin">
+                                <i class="fa fa-link"></i> Ata Yalın Başaran Github
+                            </a>
+                        </li>
+                    </ul>
 
-    <script src="/static/search.js"></script>
+                    <!-- Github account links of everybody. -->
+                    <!-- Report Link -->
+                    <!-- -->
+                </div>
+
+                <div class="index-element">
+                    <ul style="justify-content: left; list-style-type: space-count;">
+                        <!-- <li>
+                            <b>Title</b> NRC Lexicon |
+                            <b>Link</b> https://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm
+                            <b>Access date</b> 17.06.2023 - 14:48.
+                        </li> -->
+                        <li>
+                            Mohammad, S. M., & Turney, P. D. (2013). Crowdsourcing a Word-Emotion Association
+                            Lexicon. Computational Intelligence, 29(3), 436-465.
+                        </li>
+                        <li>
+                            Mohammad, Saif, and Peter Turney. "Emotions Evoked by Common Words and Phrases: Using
+                            Mechanical Turk to Create an Emotion Lexicon." In Proceedings of the NAACL HLT 2010 Workshop
+                            on Computational Approaches to Analysis and Generation of Emotion in Text, June 2010, Los
+                            Angeles, CA. Association for Computational Linguistics, pp. 26-34. Available online: link.
+                        </li>
+                    </ul>
+
+                    <ul style="justify-content: left; list-style-type: space-count;">
+                        <li>
+                            <b>Title: </b> Star Wars Movie Scripts
+
+                            <b>Link: </b>
+                            <a href="https://www.kaggle.com/datasets/xvivancos/star-wars-movie-scripts">
+                                https://www.kaggle.com/datasets/xvivancos/star-wars-movie-scripts
+                            </a>
+
+                            <b>Main Link: </b>
+                            <a href="https://github.com/gastonstat/StarWars/tree/master/Text_files">
+                                https://github.com/gastonstat/StarWars/tree/master/Text_files</a>
+
+                            <b>Access date: </b> 17.06.2023 - 15:13.
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+
+            <div class="row">
+                <div class="index-element">
+                    <h1>Contact</h1>
+                </div>
+                <div class="index-element"></div>
+            </div>
+
+            <div class="row">
+                <div class="index-element">
+                    <form class="contact-form" method="POST" action="/authors">
+                        <div class="row">
+                            <input type="text" name="name" placeholder="Your name">
+                            <input type="email" name="email" placeholder="Your email">
+                        </div>
+                        <div class="row">
+                            <textarea name="message" placeholder="Your message"></textarea>
+                        </div>
+                        <div class="row">
+                            <input type="submit" value="Send">
+                        </div>
+                    </form>
+                </div>
+
+                <div class="index-element"></div>
+            </div>
+
+        </div>
+
+
+        <footer>
+            ©2023 - Hepsi 1 Team
+        </footer>
+
+        <script src="/static/search.js"></script>
 
 </body>
 

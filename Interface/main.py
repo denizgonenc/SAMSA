@@ -6,19 +6,19 @@ import os
 import shutil
 import json
 import logging
-from SpeechRecognition.src.speaker_diarization import SpeakerDiarization
 import nltk
 nltk.download('punkt')
+
+from SpeechRecognition.src.speaker_diarization import SpeakerDiarization
 from SentimentalAnalysis.src.endpoint import predict_script
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 
 SUPPORTED_EXTENSIONS = [".mp3", ".mp4", ".wav", ".json"]
 ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
 STATIC_PATH = os.path.join(ROOT_PATH, "static")
 TEMPLATES_PATH = os.path.join(ROOT_PATH, "templates")
 MOVIES_PATH = os.path.join(ROOT_PATH, "movies")
+MESSAGES_PATH = os.path.join(ROOT_PATH, "messages.json")
+
 SMTP_SERVER = 'smtp.gmail.com'
 SMTP_PORT = 587
 ADMIN_EMAIL = 'info.samsa.contact@gmail.com'
@@ -68,6 +68,11 @@ next(database.get_db()).execute(text('CREATE VIRTUAL TABLE IF NOT EXISTS movies_
 # The model that segments, diarize speech is loaded.
 speaker_diarization_model = SpeakerDiarization()
 
+# messages.json file is created.
+if not os.path.isfile(MESSAGES_PATH):
+    with open(MESSAGES_PATH, 'w', encoding='utf-8') as messages_file:
+        json.dump([], messages_file, indent=4)
+
 ##################################
 #     HTML RESPONSES (VIEWS)     #
 ##################################
@@ -98,16 +103,24 @@ async def authors_view(request: Request):
     return templates.TemplateResponse("authors.html", {"request": request})
 
 @app.post("/authors", response_class=HTMLResponse)
-async def create_messages(request: Request, message: str=Form(), email: str=Form(), name: str=Form()):
+async def create_message(request: Request):
+    form_data = await request.form()
+    message = schemas.Message(
+        name=form_data.get("name", None),
+        email=form_data.get("email", None),
+        message=form_data.get("message", None)
+    )
+
     data = []
-    try:
-        with open("Interface/messages.json", 'r', encoding="utf-8") as json_file:
-            data = json.load(json_file)
-    except FileNotFoundError:
-        open("Interface/messages.json", "a", encoding="utf-8").close()
-    with open("Interface/messages.json", 'w', encoding="utf-8") as json_file:
-        data.append({"name": name, "email": email, "message": message })
-        json.dump(data, json_file, indent=4)
+    with open(MESSAGES_PATH, 'r', encoding="utf-8") as json_file:
+        data = json.load(json_file)
+        print(data)
+    
+    if message.is_ok():
+        with open(MESSAGES_PATH, 'w', encoding="utf-8") as json_file:
+            data.append(message.dict_format())
+            json.dump(data, json_file, indent=4)
+            
     return templates.TemplateResponse("authors.html", {"request": request})
 
 
@@ -190,8 +203,10 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
     
     if file_extension != ".json":
         output_file_path = os.path.join(db_movie_dir_path, file_name + ".json")
-        thread_speech = Thread(target=functions.run_speech_2_text, args=(wav_file_path, output_file_path, speaker_diarization_model))
-        thread_charts = Thread(target=functions.create_graphs, args=(db_movie_dir_path, output_file_path, thread_speech))
+        thread_speech = Thread(target=functions.run_speech_2_text,
+                               args=(wav_file_path, output_file_path, speaker_diarization_model, logging.info))
+        thread_charts = Thread(target=functions.create_graphs,
+                               args=(db_movie_dir_path, output_file_path, logging.info, thread_speech))
         thread_speech.start()
         thread_charts.start()
         
