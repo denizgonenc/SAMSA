@@ -13,9 +13,10 @@ This is a software project that aims to [provide a brief overview of the project
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
+- [Contributors](#contributing)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
+- [References](#references)
 
 ## Installation
 
