@@ -73,6 +73,9 @@ if not os.path.isfile(MESSAGES_PATH):
     with open(MESSAGES_PATH, 'w', encoding='utf-8') as messages_file:
         json.dump([], messages_file, indent=4)
 
+# It is used to acess threads.
+threads = []
+
 ##################################
 #     HTML RESPONSES (VIEWS)     #
 ##################################
@@ -204,9 +207,12 @@ async def upload_audio_File(uploaded_file: UploadFile = File(...), db: models.Se
     if file_extension != ".json":
         output_file_path = os.path.join(db_movie_dir_path, file_name + ".json")
         thread_speech = Thread(target=functions.run_speech_2_text,
-                               args=(wav_file_path, output_file_path, speaker_diarization_model, logging.info))
+                               args=(wav_file_path, output_file_path, speaker_diarization_model, logging.info,
+                                     threads.pop() if len(threads) != 0 else None))
         thread_charts = Thread(target=functions.create_graphs,
                                args=(db_movie_dir_path, output_file_path, logging.info, thread_speech))
+        thread_charts.setDaemon(True)
+        threads.append(thread_charts)
         thread_speech.start()
         thread_charts.start()
         
