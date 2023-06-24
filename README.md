@@ -5,6 +5,7 @@
 ## Description
 
 This is a sentiment analysis project conducted in the field of Natural Language Processing (NLP) and speech recognition. The objective of this project was to predict the sentiment of lines spoken by characters in movies and visualize the results. The lines were obtained through speech-to-text conversion of sound files. To calculate sentiment scores, we employed the NRC emotion lexicon.
+You can visit [here](http://34.78.112.214/).
 
 ## Table of Contents
 
